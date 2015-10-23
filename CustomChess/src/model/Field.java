@@ -1,12 +1,12 @@
 package model;
 
-import model.pieces.Piece;
+import model.pieces.PieceInterface;
 
 public class Field {
 
-	private Piece piece;
+	private PieceInterface piece;
 	
-	public Piece getPiece() {
+	public PieceInterface getPiece() {
 		return piece;
 	}
 	
