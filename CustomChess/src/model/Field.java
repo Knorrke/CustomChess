@@ -1,12 +1,12 @@
 package model;
 
-import model.pieces.PieceInterface;
+import model.pieces.interfaces.MoveLogicInitializerInterface;
 
 public class Field {
 
-	private PieceInterface piece;
+	private MoveLogicInitializerInterface piece;
 	
-	public PieceInterface getPiece() {
+	public MoveLogicInitializerInterface getPiece() {
 		return piece;
 	}
 	

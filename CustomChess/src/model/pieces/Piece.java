@@ -1,14 +1,23 @@
 package model.pieces;
 
 import controller.MoveLogicInterface;
+import model.pieces.interfaces.MoveLogicInitializerInterface;
+import model.pieces.interfaces.ViewInitializerInterface;
 import player.PlayerColor;
+import view.PieceViewInterface;
 
-public abstract class Piece implements PieceInterface{
+public abstract class Piece implements MoveLogicInitializerInterface, ViewInitializerInterface{
 	
 	protected PlayerColor color;
 	protected int posX, posY;
 	protected MoveLogicInterface moveLogic;
+	protected PieceViewInterface view;
 	
+	public Piece(PlayerColor color, int posX, int posY) {
+		this.color = color;
+		this.posX = posX;
+		this.posY = posY;
+	}
 	/**
 	 * @return the color
 	 */

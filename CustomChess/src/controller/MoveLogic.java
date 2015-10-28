@@ -1,28 +1,58 @@
 package controller;
 
-import model.pieces.PieceInterface;
+import java.util.Arrays;
+
+import model.pieces.Piece;
 import player.PlayerColor;
 
 public class MoveLogic implements MoveLogicInterface {
 	
 	private final String rule;
-	private final PieceInterface piece;
+	private final Piece piece;
 	
-	public MoveLogic(PieceInterface piece, String rule){
+	public MoveLogic(Piece piece, String rule){
 		this.rule = rule;
 		this.piece = piece;
 	}
 	
-	public boolean moveCorrect(int neuX, int neuY){
-    	String[] rules = rule.split("\\|"); //Regeln in die einzelnen "Oder"-Teile aufteilen
+	/**
+	 * Checks if the piece of this controller can move to the specified position.
+	 * This method is equal to calling moveCorrect(x,y), where {x,y} = newPos
+	 * @param newPos Array containing x and y position, where piece should move to
+	 * @return true if move is according to the rule, false otherwise
+	 */
+	public boolean moveCorrect(int[] newPos){
+		if(newPos.length!=2){
+			throw new IllegalArgumentException("Position not two-dimensional: " + Arrays.toString(newPos));
+		}else{
+			return(moveCorrect(newPos[0],newPos[1]));
+		}
+	}
+	/**
+	 * Checks if the piece of this controller can move to the specified position
+	 * @param newX x-position where piece should move to
+	 * @param newY y-position where piece should move to
+	 * @return true if move is according to the rule, false otherwise
+	 */
+	public boolean moveCorrect(int newX, int newY){
+    	String[] rules = rule.split("\\|"); //Split total rule at "or" into single segments
     	for(int i=0; i<rules.length; i++){
-    		if(zugEntsprichtRegel(rules[i], neuX, neuY)) return true; //Für jeden Teil prüfen, ob der Zug dieser Regel entspricht. Wenn eine gefunden wurde true zurückgeben
+    		if(moveAccordingToSingleRule(rules[i], newX, newY)){
+    			return true; //If the move matches one of the rules then its correct
+    		}
     	}
-    	return false; //Wenn alle durchgearbeitet wurden und keine gefunden wurde, dann false zurückgeben
+    	return false; //if no correct rule was found previously then its wrong
     }
 	
 	// überprüft, ob der Zug der bestimmten Zugregel der Form "X-Unterschied,Y-Unterschied,Sonderbedingung" entspricht
-    private boolean zugEntsprichtRegel(String rule, int neuX, int neuY){
+    /**
+     * Checks if the move to specified position matches the rule.
+     * @param rule a single rule of type "x-Difference, y-Difference, special conditions"
+     * @param newX new x-position
+     * @param newY new y-position
+     * @return true if the move matches the specified rule
+     */
+	private boolean moveAccordingToSingleRule(String rule, int neuX, int neuY){
     	int[] pos = piece.getPosition();
     	int posX = pos[0];
     	int posY = pos[1];
