@@ -1,7 +1,10 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
+import controller.moveLogicAdapter.MoveLogicAdapterInterface;
 import model.pieces.Piece;
 import player.PlayerColor;
 
@@ -9,15 +12,18 @@ public class MoveLogic implements MoveLogicInterface {
 	
 	private final String rule;
 	private final Piece piece;
+	private final static int X = 0, Y=1;
+	private HashMap<Character, MoveLogicAdapterInterface> adapterList;
+	
 	
 	public MoveLogic(Piece piece, String rule){
 		this.rule = rule;
 		this.piece = piece;
+		adapterList = new HashMap<>();
 	}
 	
 	/**
-	 * Checks if the piece of this controller can move to the specified position.
-	 * This method is equal to calling moveCorrect(x,y), where {x,y} = newPos
+	 * Checks if the piece of this controller can move to the specified position
 	 * @param newPos Array containing x and y position, where piece should move to
 	 * @return true if move is according to the rule, false otherwise
 	 */
@@ -25,95 +31,87 @@ public class MoveLogic implements MoveLogicInterface {
 		if(newPos.length!=2){
 			throw new IllegalArgumentException("Position not two-dimensional: " + Arrays.toString(newPos));
 		}else{
-			return(moveCorrect(newPos[0],newPos[1]));
+		
+			String[] rules = rule.split("\\|"); //Split total rule at "or" into single segments
+	    	for(int i=0; i<rules.length; i++){
+	    		if(moveAccordingToSingleRule(rules[i], newPos)){
+	    			return true; //If the move matches one of the rules then its correct
+	    		}
+	    	}
+	    	return false; //if no correct rule was found previously then its wrong
 		}
-	}
-	/**
-	 * Checks if the piece of this controller can move to the specified position
-	 * @param newX x-position where piece should move to
-	 * @param newY y-position where piece should move to
-	 * @return true if move is according to the rule, false otherwise
-	 */
-	public boolean moveCorrect(int newX, int newY){
-    	String[] rules = rule.split("\\|"); //Split total rule at "or" into single segments
-    	for(int i=0; i<rules.length; i++){
-    		if(moveAccordingToSingleRule(rules[i], newX, newY)){
-    			return true; //If the move matches one of the rules then its correct
-    		}
-    	}
-    	return false; //if no correct rule was found previously then its wrong
     }
 	
 	// überprüft, ob der Zug der bestimmten Zugregel der Form "X-Unterschied,Y-Unterschied,Sonderbedingung" entspricht
     /**
      * Checks if the move to specified position matches the rule.
      * @param rule a single rule of type "x-Difference, y-Difference, special conditions"
-     * @param newX new x-position
-     * @param newY new y-position
+     * @param newPos position to move to as {x,y} array
      * @return true if the move matches the specified rule
      */
-	private boolean moveAccordingToSingleRule(String rule, int neuX, int neuY){
-    	int[] pos = piece.getPosition();
-    	int posX = pos[0];
-    	int posY = pos[1];
-    	
-    	//if Piece is black, swap + and - (because black pieces move in the other direction)
-    	if(piece.getColor()==PlayerColor.BLACK){
-    		rule = swapChars(rule,'+','-');
-    		rule = rule.replace('+','ä'); //Ringtausch von Plus und Minus, mit Temporärem ä...
-    		rule = rule.replace('-','+');
-    		rule = rule.replace('ä','-');
-    	}
-    	String[] regelTeil = rule.split(","); //Split at ','
-    	if(regelTeil[0].equals("n") && regelTeil[1].equals("m")); // "n,m" bedeutet auf jedes beliebige Feld
-    	else if(rule.contains("n")){ //Falls die Regel "beliebig viele Felder in eine Richtung" enthält
-    		if(regelTeil[0].equals(regelTeil[1])){ //Falls die Regel "n,n" ist -> diagonale Bewegung
-    			if(Math.abs(neuX-posX) != Math.abs(neuY-posY)) return false;
-    		}else if(regelTeil[0].equals("n")){ //Falls der erste Teil beliebig, der zweite Teil aber vorgegeben ist
-    			if(regelTeil[1].startsWith("+")){
-    				if(neuY - posY != Integer.parseInt(regelTeil[1].substring(1))) return false;
-    			}else if(regelTeil[1].startsWith("-")){
-    				if(posY - neuY != Integer.parseInt(regelTeil[1].substring(1))) return false;
-    			}else{
-    				if(Math.abs(neuY-posY) != Integer.parseInt(regelTeil[1])) return false;
-    			}
-    		}else{ //Falls der zweite Teil beliebig, aber der erste Teil vorgegeben ist
-    			if(regelTeil[0].startsWith("+")){
-    				if(neuX - posX != Integer.parseInt(regelTeil[0].substring(1))) return false;
-    			}else if(regelTeil[0].startsWith("-")){
-    				if(posX - neuX != Integer.parseInt(regelTeil[0].substring(1))) return false;
-    			}else{
-    				if(Math.abs(neuX-posX) != Integer.parseInt(regelTeil[0])) return false;
-    			}
-    		}
-    	}else{ //Wenn die Regel direkt die Anzahl der Felder angibt
-	    	if(regelTeil[0].startsWith("+")){
-	    		//Falls die x-Richtung mit + beginnt, dann nur nach rechts erlauben (neuX>posX)
-	    		if(neuX - posX != Integer.parseInt(regelTeil[0].substring(1))) return false;
-	    	}else if(regelTeil[0].startsWith("-")){ 
-	    		//Falls die x-Richtung mit - beginnt, dann nur nach links erlauben(posX>neuX)
-	    		if(posX - neuX != Integer.parseInt(regelTeil[0].substring(1))) return false;
-	    	}else{
-	    		//Sonst in beide Richtungen erlauben
-	    		if(Math.abs(neuX-posX) != Integer.parseInt(regelTeil[0])) return false;
-	    	}
-	    	
-	    	if(regelTeil[1].startsWith("+")){
-	    		//Falls die y-Richtung mit + beginnt, dann nur nach rechts erlauben (neuY>posY)
-	    		if(neuY-posY != Integer.parseInt(regelTeil[1].substring(1))) return false;
-	    	}else if(regelTeil[1].startsWith("-")){
-	    		//Falls die y-Richtung mit - beginnt, dann nur nach links erlauben(posY>neuY)
-	    		if(posY-neuY != Integer.parseInt(regelTeil[1].substring(1))) return false;
-	    	}else{
-	    		if(Math.abs(neuY-posY) != Integer.parseInt(regelTeil[1])) return false;
-	    	}
-    	}
+	private boolean moveAccordingToSingleRule(String rule, int[] newPos){
 //    	
 //    	//farbe^3 XOR verknüpfung um von 1 zu 2 und 2 zu 1 zu ändern. Fragt ab, ob eine eigene Figur bereits auf dem Feld steht
 //    	if(feld.istGegnerAufFeld(farbe^3, neuX, neuY)) return false; 
 //
 //		if(feld.istUnschlagbar(neuX,neuY)) return false;
 //		
+		return allowedMovement(rule,newPos) && matchingSpecialConditions(rule,newPos);
+	}
+	
+    /**
+     * Checks, if the movement is allowed, ignoring special conditions
+     * @param rule rule specifying allowed movement
+     * @param newPos position to move to as {x,y} array
+     * @return true, if movement is allowed, false otherwise
+     */
+	private boolean allowedMovement(String rule, int[] newPos) {
+		int[] pos = piece.getPosition();
+    	
+		//if Piece is black, swap + and - (because black pieces move in the other direction)
+    	if(piece.getColor()==PlayerColor.BLACK){
+    		rule = swapChars(rule,'+','-');
+    	}
+    	
+    	String[] regelTeil = rule.split(","); //Split at ','
+    	if(allowEverywhere(regelTeil)); // piece can move everywhere 
+    	else if(regelTeil[0].equals("n") || regelTeil[1].equals("n")){
+    		if(allowDiagonal(regelTeil)){ //piece can move diagonal
+    			if(Math.abs(newPos[0]-pos[0]) != Math.abs(newPos[1]-pos[1])) return false;
+    		}else{
+    			int i = regelTeil[0].equals("n") ? 1 : 0;
+    			if(!correctDistance(regelTeil[i],newPos[i],pos[i])){
+    				return false;
+    			}
+    		}
+    	}else{ //If rule specifies correct distance directly
+	    	if(!correctDistance(regelTeil[X],newPos[X],pos[X]) 
+	    	 || !correctDistance(regelTeil[Y],newPos[Y],pos[Y])){
+	    		return false;
+	    	}
+	    }
+    	
+    	return true;
+	}
+
+	/**
+	 * Checks if the move matches the special conditions of the rule
+	 * @param rule Single rule of type "x-difference, y-difference, specialconditions"
+	 * @param newPos position to move to
+	 * @return true, if move matches special conditions, false otherwise
+	 */
+    private boolean matchingSpecialConditions(String rule, int[] newPos) {
+    	String[] ruleparts = rule.split(",");
+    	if(ruleparts.length > 2){ //if there are special conditions
+    		for(char condition : ruleparts[2].toCharArray()){ //for each special condition
+    			MoveLogicAdapterInterface mla = adapterList.get(condition);
+    			if(mla != null && !mla.isMatchingSpecialCondition(rule, newPos)){
+    				return false;
+        		}
+    		}
+    	}
+    	return true;
+
 //    	if(regelTeil.length > 2){
 //    		for(int i=0; i<regelTeil[2].length();i++){
 //	    		switch(regelTeil[2].charAt(i)){
@@ -188,12 +186,35 @@ public class MoveLogic implements MoveLogicInterface {
 //	    		}
 //    		}
 //    	}
-    	
-    	//Falls nichts von dem oberen falsch war, dann ist alles korrekt
-    	return true;
-    }
+	}
 
-    /**
+	
+	/**
+	 * Checks for one rule part, if the position is in correct Distance
+	 * @param rulepart
+	 * @param newPos
+	 * @param pos
+	 * @return
+	 */
+	private boolean correctDistance(String rulepart, int newPos, int pos) {
+		if(rulepart.startsWith("+")){
+			if(newPos-pos != Integer.parseInt(rulepart.substring(1))){
+				return false;
+			}
+		}else if(rulepart.startsWith("-")){
+			if(pos-newPos != Integer.parseInt(rulepart.substring(1))){
+				return false;
+			}
+		}else{
+			if(Math.abs(newPos-pos) != Integer.parseInt(rulepart)){
+				return false;
+			}
+		}
+		
+		return true;
+	}
+
+	/**
      * Swaps all Occurences of Character a and Character b
      * @param source
      * @param a
@@ -208,5 +229,38 @@ public class MoveLogic implements MoveLogicInterface {
 		  else sb.append(c);
 		}
 		return sb.toString();
+	}
+	
+	/**
+	 * Checks if the rule is of form "n,m"
+	 * @param ruleparts
+	 * @return
+	 */
+	private boolean allowEverywhere(String[] ruleparts){
+		if(ruleparts.length < 2){
+			throw new IllegalArgumentException("Wrong rule");
+		}
+		return ruleparts[0].equals("n") && ruleparts[1].equals("m");
+	}
+	
+	/**
+	 * Checks if the rule is of form "n,n"
+	 * @param ruleparts
+	 * @return
+	 */
+	private boolean allowDiagonal(String[] ruleparts) {
+		if(ruleparts.length < 2){
+			throw new IllegalArgumentException("Wrong rule");
+		}
+		return ruleparts[0].equals(ruleparts[1]);
+	}
+	
+	/**
+	 * Adds a MoveLogicAdapter for the specified condition in rules
+	 * @param condition
+	 * @param mla
+	 */
+	public void addMoveLogicAdapter(char condition, MoveLogicAdapterInterface mla){
+		adapterList.put(condition, mla);
 	}
 }
