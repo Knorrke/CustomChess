@@ -1,25 +1,28 @@
 package controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import controller.moveLogicAdapter.AdapterFactory;
 import controller.moveLogicAdapter.MoveLogicAdapterInterface;
+import model.Board;
 import model.pieces.Piece;
 import player.PlayerColor;
 
 public class MoveLogic implements MoveLogicInterface {
 	
-	private final String rule;
+	private final Board board;
 	private final Piece piece;
+	private final String rule;
 	private final static int X = 0, Y=1;
-	private HashMap<Character, MoveLogicAdapterInterface> adapterList;
+	private HashMap<Character, MoveLogicAdapterInterface> adapterMap;
 	
 	
-	public MoveLogic(Piece piece, String rule){
-		this.rule = rule;
+	public MoveLogic(Board board, Piece piece, String rule){
+		this.board = board;
 		this.piece = piece;
-		adapterList = new HashMap<>();
+		this.rule = rule;
+		adapterMap = new HashMap<>();
 	}
 	
 	/**
@@ -31,7 +34,8 @@ public class MoveLogic implements MoveLogicInterface {
 		if(newPos.length!=2){
 			throw new IllegalArgumentException("Position not two-dimensional: " + Arrays.toString(newPos));
 		}else{
-		
+	    	if(board.isPieceOnSquare(piece.getColor(),newPos)) return false; 
+	    	
 			String[] rules = rule.split("\\|"); //Split total rule at "or" into single segments
 	    	for(int i=0; i<rules.length; i++){
 	    		if(moveAccordingToSingleRule(rules[i], newPos)){
@@ -42,20 +46,13 @@ public class MoveLogic implements MoveLogicInterface {
 		}
     }
 	
-	// überprüft, ob der Zug der bestimmten Zugregel der Form "X-Unterschied,Y-Unterschied,Sonderbedingung" entspricht
-    /**
+	/**
      * Checks if the move to specified position matches the rule.
      * @param rule a single rule of type "x-Difference, y-Difference, special conditions"
      * @param newPos position to move to as {x,y} array
      * @return true if the move matches the specified rule
      */
 	private boolean moveAccordingToSingleRule(String rule, int[] newPos){
-//    	
-//    	//farbe^3 XOR verknüpfung um von 1 zu 2 und 2 zu 1 zu ändern. Fragt ab, ob eine eigene Figur bereits auf dem Feld steht
-//    	if(feld.istGegnerAufFeld(farbe^3, neuX, neuY)) return false; 
-//
-//		if(feld.istUnschlagbar(neuX,neuY)) return false;
-//		
 		return allowedMovement(rule,newPos) && matchingSpecialConditions(rule,newPos);
 	}
 	
@@ -96,16 +93,16 @@ public class MoveLogic implements MoveLogicInterface {
 
 	/**
 	 * Checks if the move matches the special conditions of the rule
-	 * @param rule Single rule of type "x-difference, y-difference, specialconditions"
+	 * @param singleRule Single rule of type "x-difference, y-difference, specialconditions"
 	 * @param newPos position to move to
 	 * @return true, if move matches special conditions, false otherwise
 	 */
-    private boolean matchingSpecialConditions(String rule, int[] newPos) {
-    	String[] ruleparts = rule.split(",");
+    private boolean matchingSpecialConditions(String singleRule, int[] newPos) {
+    	String[] ruleparts = singleRule.split(",");
     	if(ruleparts.length > 2){ //if there are special conditions
     		for(char condition : ruleparts[2].toCharArray()){ //for each special condition
-    			MoveLogicAdapterInterface mla = adapterList.get(condition);
-    			if(mla != null && !mla.isMatchingSpecialCondition(rule, newPos)){
+    			MoveLogicAdapterInterface mla = adapterMap.get(condition);
+    			if(mla != null && !mla.isMatchingSpecialCondition(board, piece, singleRule, newPos)){
     				return false;
         		}
     		}
@@ -115,15 +112,6 @@ public class MoveLogic implements MoveLogicInterface {
 //    	if(regelTeil.length > 2){
 //    		for(int i=0; i<regelTeil[2].length();i++){
 //	    		switch(regelTeil[2].charAt(i)){
-//	    		case 'X': //Nur schlagen
-//	    			if(!feld.istGegnerAufFeld(farbe, neuX, neuY)) return false;
-//	    			break;
-//	    		case 'M': //Nur bewegen (Move)
-//	    			if(feld.istGegnerAufFeld(farbe, neuX, neuY)) return false;
-//	    			break;
-//	    		case '!': //Nur wenn Feld nicht bedroht ist
-//	    			if(feld.istBedroht(farbe, neuX,neuY)) return false;
-//	    			break;
 //	    		case 'F': //Nur wenn der Weg frei ist
 //	    			if(posX-neuX == 0){ //Wenn die Figur sich gerade nach oben bewegt, dann einfach nur die y-Richtung durchlaufen
 //	    				
@@ -261,6 +249,20 @@ public class MoveLogic implements MoveLogicInterface {
 	 * @param mla
 	 */
 	public void addMoveLogicAdapter(char condition, MoveLogicAdapterInterface mla){
-		adapterList.put(condition, mla);
+		adapterMap.put(condition, mla);
+	}
+
+	/**
+	 * Automatically adds the MoveLogicAdapters for the special conditions in the rule.
+	 */
+	public void addAdaptersAutomatically() {
+		for( String rulepart : rule.split("\\|")){
+			String[] ruleparts = rulepart.split(",");
+			if(ruleparts.length > 2){
+				for(char condition : ruleparts[2].toCharArray()){
+					adapterMap.put(condition,AdapterFactory.getAdapter(condition));
+				}
+			}
+		}
 	}
 }

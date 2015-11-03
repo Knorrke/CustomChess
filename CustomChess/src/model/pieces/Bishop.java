@@ -1,18 +1,15 @@
 package model.pieces;
 
 import controller.MoveLogic;
-import player.PlayerColor;
 import view.PieceView;
 
 public class Bishop extends Piece {
 	
-	public Bishop(PlayerColor color, int posX, int posY) {
-		super(color, posX, posY);
-	}
-
 	@Override
 	public void initializeMoveLogic(){
-		moveLogic = new MoveLogic(this, "n,n,F");
+		MoveLogic ml = new MoveLogic(board, this, "n,n,F");
+		ml.addAdaptersAutomatically();
+		moveLogic = ml;
 	}
 	
 	@Override

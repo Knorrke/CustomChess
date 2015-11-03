@@ -1,6 +1,7 @@
 package model.pieces;
 
 import controller.MoveLogicInterface;
+import model.Board;
 import model.pieces.interfaces.MoveLogicInitializerInterface;
 import model.pieces.interfaces.ViewInitializerInterface;
 import player.PlayerColor;
@@ -12,12 +13,8 @@ public abstract class Piece implements MoveLogicInitializerInterface, ViewInitia
 	protected int posX, posY;
 	protected MoveLogicInterface moveLogic;
 	protected PieceViewInterface view;
+	protected Board board;
 	
-	public Piece(PlayerColor color, int posX, int posY) {
-		this.color = color;
-		this.posX = posX;
-		this.posY = posY;
-	}
 	/**
 	 * @return the color
 	 */
@@ -60,5 +57,15 @@ public abstract class Piece implements MoveLogicInitializerInterface, ViewInitia
 			this.posX = pos[0];
 			this.posY = pos[1];
 		}
+	}
+	/**
+	 * @param board the board to set
+	 */
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
+	public boolean moveCorrect(int[] newPos) {
+		return moveLogic.moveCorrect(newPos);
 	}
 }

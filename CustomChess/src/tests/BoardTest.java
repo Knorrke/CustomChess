@@ -5,13 +5,13 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import model.Board;
-import model.Field;
+import model.Square;
 
 public class BoardTest {
 
 	@Test
 	public void setupTest() {
-		Field field = new Field();
+		Square field = new Square();
 		assertEquals("created Fields should be empty", field.getPiece(), null);
 		
 		Board board = new Board(8,8);

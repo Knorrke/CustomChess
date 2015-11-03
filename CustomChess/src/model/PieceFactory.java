@@ -1,32 +1,20 @@
 package model;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
-import file.FileLoader;
 import model.pieces.Piece;
 import player.PlayerColor;
 
 public class PieceFactory {
 	
-	public static Piece newPiece(String className, PlayerColor color){
+	public static Piece newPiece(Board board,String className, PlayerColor color, int[] pos){
 		try {
-			Class<? extends Piece> pieceClass = Class.forName(className).asSubclass(Piece.class);
-			Constructor<? extends Piece> constructor = pieceClass.getConstructor(PlayerColor.class, int.class, int.class);
-			Piece piece = constructor.newInstance(color, 0,0);
-			piece.setColor(color);
-			piece.initializeMoveLogic();
-			
+			Piece piece = Class.forName(className).asSubclass(Piece.class).newInstance();
+			initializePiece(piece, board, color, pos);
 			return piece;
 		} catch (ClassNotFoundException e) {
-			FileLoader loader = new FileLoader();
+			//FileLoader loader = new FileLoader();
 			//TODO: Read description of piece from game file and create CustomPiece
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
 			e.printStackTrace();
@@ -36,6 +24,14 @@ public class PieceFactory {
 			e.printStackTrace();
 		} 
 		return null;
+	}
+
+	private static void initializePiece(Piece piece, Board board, PlayerColor color, int[] pos) {
+		piece.setColor(color);
+		piece.setBoard(board);
+		piece.setPosition(pos);
+		piece.initializeMoveLogic();
+		piece.initializeView();
 	}
 
 }

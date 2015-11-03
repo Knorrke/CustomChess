@@ -1,7 +1,6 @@
 package model.pieces;
 
 import controller.MoveLogic;
-import player.PlayerColor;
 import view.PieceView;
 
 public class CustomPiece extends Piece{
@@ -9,15 +8,17 @@ public class CustomPiece extends Piece{
 	private final String rule;
 	private final String name;
 	
-	public CustomPiece(String name, String rule,PlayerColor color, int posX, int posY){
-		super(color, posX, posY);
+	public CustomPiece(String name, String rule){
+		super();
 		this.name = name;
 		this.rule = rule;
 	}
 
 	@Override
 	public void initializeMoveLogic() {
-		moveLogic = new MoveLogic(this,rule);
+		MoveLogic ml = new MoveLogic(board, this,rule);
+		ml.addAdaptersAutomatically();
+		moveLogic = ml;
 	}
 
 	@Override
