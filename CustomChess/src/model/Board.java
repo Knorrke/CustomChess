@@ -12,31 +12,35 @@ public class Board {
 		squares = new Square[width][height];
 	}
 
-	public Square[][] getFields() {
+	public Square[][] getSquares() {
 		return squares;
 	}
 
-	public boolean isPieceOnSquare(PlayerColor color, int[] newPos) {
-		if(newPos.length != 2){
+	public boolean isPieceOnSquare(PlayerColor color, int[] pos) {
+		if(pos.length != 2){
 			throw new IllegalArgumentException("Wrong position in " + this.getClass());
 		}
 		
-		Piece piece = squares[newPos[X]][newPos[Y]].getPiece();
+		Piece piece = squares[pos[X]][pos[Y]].getPiece();
 		return piece != null && piece.getColor().equals(color);
 	}
+	
+	public boolean isPieceOnSquare(int[] pos){
+		return isPieceOnSquare(PlayerColor.BLACK,pos) || isPieceOnSquare(PlayerColor.WHITE,pos);
+	}
 
-	public boolean isAttacked(PlayerColor attackerColor, int[] newPos) {
-		if(newPos.length != 2){
+	public boolean isAttacked(PlayerColor attackerColor, int[] pos) {
+		if(pos.length != 2){
 			throw new IllegalArgumentException("Wrong position in " + this.getClass());
 		}
-		Square sq = squares[newPos[X]][newPos[Y]];
+		Square sq = squares[pos[X]][pos[Y]];
 		Piece piece = sq.getPiece();
 		
 		try{
-			sq.setPiece(PieceFactory.newPiece(this, "model.pieces.Dummy", attackerColor.getOppositColor(), newPos));
+			sq.setPiece(PieceFactory.newPiece(this, "model.pieces.Dummy", attackerColor.getOppositColor(), pos));
 			for(int i=0; i<squares.length; i++){
 				for(int j=0; j<squares.length; j++){
-					if(squares[i][j].getPiece().moveCorrect(newPos)){
+					if(squares[i][j].getPiece().moveCorrect(pos)){
 						
 						return true;
 					}

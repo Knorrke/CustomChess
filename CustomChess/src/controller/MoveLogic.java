@@ -109,71 +109,15 @@ public class MoveLogic implements MoveLogicInterface {
     	}
     	return true;
 
-//    	if(regelTeil.length > 2){
-//    		for(int i=0; i<regelTeil[2].length();i++){
-//	    		switch(regelTeil[2].charAt(i)){
-//	    		case 'F': //Nur wenn der Weg frei ist
-//	    			if(posX-neuX == 0){ //Wenn die Figur sich gerade nach oben bewegt, dann einfach nur die y-Richtung durchlaufen
-//	    				
-//	    				boolean next = true; // Braucht man, weil man auf ein Feld eines Gegners ziehen kann, aber nicht weiter
-//	    				
-//	    				//Differenz durchlaufen, mit Signum die Richtung bestimmen.
-//	    				for(int dif=0; (-1)*Math.abs(posY-neuY) <= dif && dif <= Math.abs(posY-neuY); dif = dif + (int)(Math.signum(neuY-posY))){
-//		    				if(dif==0)continue; //das eigene Feld nicht prüfen...
-//	    					if(!next) return false;
-//		    				if(feld.istGegnerAufFeld(farbe^3, posX, posY+dif)) return false; //wenn auf dem Feld eine eigene Figur steht
-//		    				if(feld.istGegnerAufFeld(farbe, posX, posY+dif)) next = false; //wenn auf dem Feld eine gegnerische Figur steht, dann nicht dahinter
-//	    				}
-//	    			}else{ //Wenn die Figur sich nicht senkrecht bewegt, dann eine Gerade aufstellen, und alle Felder darauf durchlaufen.
-//		    			double m = (double)(posY-neuY)/(posX-neuX); //Steigung der Geraden
-//		    			double t = posY - (double)(posY-neuY)/(posX-neuX) * posX; //Y-Achsenabschnitt
-//		    		
-//		    			if(Math.abs(posX-neuX)>Math.abs(posY-neuY)){ //Wenn der X-Unterschied größer ist, dann diesen durchlaufen
-//		    				boolean next = true;
-//		    				
-//		    				//X-Differenz durchlaufen, mit Signum die Richtung bestimmen.
-//		    				for(int dif=0; (-1)*Math.abs(posX-neuX) <= dif && dif <= Math.abs(posX-neuX); dif = dif + (int)(Math.signum(neuX-posX))){
-//		    					if(dif==0)continue; //das eigene Feld nicht prüfen...
-//		    					if(!next) return false;
-//			    				int y = (int) (m*(posX+dif) +t +0.5); //Y-Wert berechnen, +0.5 für richtige Rundung
-//			    				if(feld.istGegnerAufFeld(farbe^3, posX+dif, y)) return false; //Wenn auf dem Feld eine eigene Figur steht
-//			    				if(feld.istGegnerAufFeld(farbe, posX+dif, y)) next = false; // Wenn auf dem Feld eine gegnerische Figur steht, dann nicht dahinter
-//			    			}
-//		    			}else{
-//		    				boolean next = true;
-//		    				
-//		    				//Y-Differenz durchlaufen, mit Signum die Richtung bestimmen.
-//		    				for(int dif=0; (-1)*Math.abs(posY-neuY) <= dif && dif <= Math.abs(posY-neuY); dif = dif + (int)(Math.signum(neuY-posY))){
-//		    					if(dif==0)continue; //das eigene Feld nicht prüfen...
-//		    					if(!next) return false;
-//		    					int x = (int)(((posY+dif)-t)/m +0.5); //X-Wert berechnen, +0.5 für richtige Rundung
-//			    				if(feld.istGegnerAufFeld(farbe^3, x, posY+dif)) return false; //Wenn auf dem Feld eine eigene Figur steht
-//			    				if(feld.istGegnerAufFeld(farbe, x, posY+dif)) next = false; // Wenn auf dem Feld eine gegnerische Figur steht, dann nicht dahinter
-//		    				}
-//		    			}
-//	    			}
-//	    			break;
 //	    		case 'B': //Nur wenn noch nicht bewegt
 //	    			if(bewegt) return false;
 //	    			break;
 //	    			
 //	    		case '2': case '3': case '4': //zwei- /drei- /vier-mal ziehen
 //	    			break;
-//	    		case 'S': //MUSS über eine Figur springen => Gegenteil von F
-//	    			if(zugEntsprichtRegel(regelTeil[0]+","+regelTeil[1]+",F", neuX, neuY)) return false;
-//	    			break;
-//	    		case '#': //Nur, wenn er selbst bedroht wird
-//	    			if(!feld.istBedroht(farbe, posX, posY)) return false;
-//	    			break;
-//	    		case '*': //Nur, wenn er selbst Nicht bedroht wird;
-//	    			if(feld.istBedroht(farbe, posX, posY)) return false;
-//	    			break;
 //	    		default:
 //	    			System.err.println("Unbekannte Zugregel " + regelTeil[3].charAt(0));
 //	    			break;
-//	    		}
-//    		}
-//    	}
 	}
 
 	
