@@ -5,8 +5,9 @@ import player.PlayerColor;
 
 public class Board {
 
-	private Square[][] squares;
 	private final static int X=0,Y=1;
+
+	private Square[][] squares;
 	
 	public Board(int width, int height){
 		squares = new Square[width][height];
@@ -17,16 +18,15 @@ public class Board {
 	}
 
 	public boolean isPieceOnSquare(PlayerColor color, int[] pos) {
-		if(pos.length != 2){
-			throw new IllegalArgumentException("Wrong position in " + this.getClass());
-		}
-		
-		Piece piece = squares[pos[X]][pos[Y]].getPiece();
-		return piece != null && piece.getColor().equals(color);
+		return isPieceOnSquare(pos) && 
+				squares[pos[X]][pos[Y]].getPiece().getColor().equals(color);
 	}
 	
 	public boolean isPieceOnSquare(int[] pos){
-		return isPieceOnSquare(PlayerColor.BLACK,pos) || isPieceOnSquare(PlayerColor.WHITE,pos);
+		if(pos.length != 2){
+			throw new IllegalArgumentException("Wrong position in " + this.getClass());
+		}
+		return squares[pos[X]][pos[Y]].hasPiece();
 	}
 
 	public boolean isAttacked(PlayerColor attackerColor, int[] pos) {

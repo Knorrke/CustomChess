@@ -1,6 +1,5 @@
 package controller.moveLogicAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import model.Board;
@@ -23,7 +22,7 @@ public class OnlyFreeWayAdapter implements MoveLogicAdapterInterface {
 	}
 
 	private List<Square> getSquaresBetween(Square[][] squares, int[] pos, int[] newPos) {
-		//TODO
+		//TODO implement logic
 //		List<Square> list = new ArrayList<>();
 //		if(pos[X] == newPos[X]){//vertical
 //			int row = pos[X];
