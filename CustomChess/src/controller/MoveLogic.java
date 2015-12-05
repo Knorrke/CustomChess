@@ -3,8 +3,8 @@ package controller;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import controller.moveLogicAdapter.AdapterFactory;
-import controller.moveLogicAdapter.MoveLogicAdapterInterface;
+import controller.moveLogicStrategy.BehaviourFactory;
+import controller.moveLogicStrategy.MoveLogicBehaviour;
 import model.Board;
 import model.pieces.Piece;
 import player.PlayerColor;
@@ -15,14 +15,14 @@ public class MoveLogic implements MoveLogicInterface {
 	private final Piece piece;
 	private final String rule;
 	private final static int X = 0, Y=1;
-	private HashMap<Character, MoveLogicAdapterInterface> adapterMap;
+	private HashMap<Character, MoveLogicBehaviour> strategyMap;
 	
 	
 	public MoveLogic(Board board, Piece piece, String rule){
 		this.board = board;
 		this.piece = piece;
 		this.rule = rule;
-		adapterMap = new HashMap<>();
+		strategyMap = new HashMap<>();
 	}
 	
 	/**
@@ -101,8 +101,8 @@ public class MoveLogic implements MoveLogicInterface {
     	String[] ruleparts = singleRule.split(",");
     	if(ruleparts.length > 2){ //if there are special conditions
     		for(char condition : ruleparts[2].toCharArray()){ //for each special condition
-    			MoveLogicAdapterInterface mla = adapterMap.get(condition);
-    			if(mla != null && !mla.isMatchingSpecialCondition(board, piece, singleRule, newPos)){
+    			MoveLogicBehaviour mlb = strategyMap.get(condition);
+    			if(mlb != null && !mlb.isMatchingSpecialCondition(board, piece, singleRule, newPos)){
     				return false;
         		}
     		}
@@ -188,23 +188,23 @@ public class MoveLogic implements MoveLogicInterface {
 	}
 	
 	/**
-	 * Adds a MoveLogicAdapter for the specified condition in rules
+	 * Adds a MoveLogicBehaviour for the specified condition in rules
 	 * @param condition
-	 * @param mla
+	 * @param mlb
 	 */
-	public void addMoveLogicAdapter(char condition, MoveLogicAdapterInterface mla){
-		adapterMap.put(condition, mla);
+	public void addMoveLogicAdapter(char condition, MoveLogicBehaviour mlb){
+		strategyMap.put(condition, mlb);
 	}
 
 	/**
-	 * Automatically adds the MoveLogicAdapters for the special conditions in the rule.
+	 * Automatically adds the MoveLogicBehaviours for the special conditions in the rule.
 	 */
-	public void addAdaptersAutomatically() {
+	public void addBehavioursAutomatically() {
 		for( String rulepart : rule.split("\\|")){
 			String[] ruleparts = rulepart.split(",");
 			if(ruleparts.length > 2){
 				for(char condition : ruleparts[2].toCharArray()){
-					adapterMap.put(condition,AdapterFactory.getAdapter(condition));
+					strategyMap.put(condition,BehaviourFactory.getBehaviour(condition));
 				}
 			}
 		}

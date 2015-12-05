@@ -1,9 +1,9 @@
-package controller.moveLogicAdapter;
+package controller.moveLogicStrategy;
 
 import model.Board;
 import model.pieces.Piece;
 
-public class OnlyCaptureAdapter implements MoveLogicAdapterInterface {
+public class OnlyToCapture implements MoveLogicBehaviour {
 
 	@Override
 	public boolean isMatchingSpecialCondition(Board board, Piece piece, String rulepart, int[] newPos) {

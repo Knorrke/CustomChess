@@ -1,4 +1,4 @@
-package controller.moveLogicAdapter;
+package controller.moveLogicStrategy;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import model.Board;
 import model.Square;
 import model.pieces.Piece;
 
-public class OnlyFreeWayAdapter implements MoveLogicAdapterInterface {
+public class OnlyIfFreeWay implements MoveLogicBehaviour {
 
 	private final static int X=0,Y=1;
 	

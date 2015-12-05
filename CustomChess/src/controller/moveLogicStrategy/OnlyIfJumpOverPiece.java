@@ -1,11 +1,11 @@
-package controller.moveLogicAdapter;
+package controller.moveLogicStrategy;
 
 import model.Board;
 import model.pieces.Piece;
 
-public class OnlyJumpOverPieceAdapter implements MoveLogicAdapterInterface {
+public class OnlyIfJumpOverPiece implements MoveLogicBehaviour {
 	
-	private MoveLogicAdapterInterface onlyFreeWayAdapter = AdapterFactory.getAdapter('F');
+	private MoveLogicBehaviour onlyFreeWayAdapter = BehaviourFactory.getBehaviour('F');
 
 	@Override
 	public boolean isMatchingSpecialCondition(Board board, Piece piece, String rulepart, int[] newPos) {

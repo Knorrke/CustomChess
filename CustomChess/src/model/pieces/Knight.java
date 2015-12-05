@@ -8,7 +8,7 @@ public class Knight extends Piece {
 	@Override
 	public void initializeMoveLogic(){
 		MoveLogic ml = new MoveLogic(board, this, "2,1|1,2");
-		ml.addAdaptersAutomatically();
+		ml.addBehavioursAutomatically();
 		moveLogic = ml;
 	}
 	

@@ -8,7 +8,7 @@ public class Bishop extends Piece {
 	@Override
 	public void initializeMoveLogic(){
 		MoveLogic ml = new MoveLogic(board, this, "n,n,F");
-		ml.addAdaptersAutomatically();
+		ml.addBehavioursAutomatically();
 		moveLogic = ml;
 	}
 	

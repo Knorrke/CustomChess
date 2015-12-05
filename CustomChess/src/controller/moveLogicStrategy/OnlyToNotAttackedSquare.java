@@ -1,9 +1,9 @@
-package controller.moveLogicAdapter;
+package controller.moveLogicStrategy;
 
 import model.Board;
 import model.pieces.Piece;
 
-public class NotAttackedSquareAdapter implements MoveLogicAdapterInterface {
+public class OnlyToNotAttackedSquare implements MoveLogicBehaviour {
 
 	@Override
 	public boolean isMatchingSpecialCondition(Board board, Piece piece, String rulepart, int[] newPos) {

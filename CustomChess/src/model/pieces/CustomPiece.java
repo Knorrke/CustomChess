@@ -17,7 +17,7 @@ public class CustomPiece extends Piece{
 	@Override
 	public void initializeMoveLogic() {
 		MoveLogic ml = new MoveLogic(board, this,rule);
-		ml.addAdaptersAutomatically();
+		ml.addBehavioursAutomatically();
 		moveLogic = ml;
 	}
 
