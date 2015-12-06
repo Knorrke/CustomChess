@@ -7,7 +7,7 @@ public class King extends Piece {
 
 	@Override
 	public void initializeMoveLogic(){
-		MoveLogic ml = new MoveLogic(board, this, "1,1|1,0|0,1|2,0,B*F");
+		MoveLogic ml = new MoveLogic(board, this, "1,1|1,0|0,1|2,0;B*F");
 		ml.addBehavioursAutomatically();
 		moveLogic = ml;
 	}

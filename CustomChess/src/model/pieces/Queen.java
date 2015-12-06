@@ -7,7 +7,7 @@ public class Queen extends Piece {
 
 	@Override
 	public void initializeMoveLogic(){
-		MoveLogic ml = new MoveLogic(board, this, "n,n,F|n,0,F|0,n,F");
+		MoveLogic ml = new MoveLogic(board, this, "n,n;F|n,0;F|0,n;F");
 		ml.addBehavioursAutomatically();
 		moveLogic = ml;
 	}

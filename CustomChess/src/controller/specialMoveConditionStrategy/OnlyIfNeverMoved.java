@@ -1,12 +1,14 @@
-package controller.moveLogicStrategy;
+package controller.specialMoveConditionStrategy;
 
 import model.Board;
 import model.pieces.Piece;
 
-public class OnlyToCapture implements MoveLogicBehaviour {
+public class OnlyIfNeverMoved implements SpecialMoveCondition {
 
 	@Override
 	public boolean isMatchingSpecialCondition(Board board, Piece piece, String rulepart, int[] newPos) {
-		return board.isPieceOnSquare(piece.getColor().getOppositColor(), newPos);
+		// TODO Auto-generated method stub
+		return false;
 	}
+
 }

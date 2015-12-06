@@ -17,7 +17,7 @@ public class Board {
 		return squares;
 	}
 
-	public boolean isPieceOnSquare(PlayerColor color, int[] pos) {
+	public boolean isPieceOfColorOnSquare(PlayerColor color, int[] pos) {
 		return isPieceOnSquare(pos) && 
 				squares[pos[X]][pos[Y]].getPiece().getColor().equals(color);
 	}

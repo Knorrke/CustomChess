@@ -1,11 +1,11 @@
-package controller.moveLogicStrategy;
+package controller.specialMoveConditionStrategy;
 
-public class BehaviourFactory {
+public class SpecialMoveConditionFactory {
 
-	public static MoveLogicBehaviour getBehaviour(char condition) {
+	public static SpecialMoveCondition getBehaviour(char condition) {
 		switch(condition){
-			case 'C': return new OnlyToCapture();
-			case 'M': return new OnlyMoveAdapter();
+			case 'C': return new OnlyCapture();
+			case 'M': return new OnlyMove();
 			case '!': return new OnlyToNotAttackedSquare();
 			case '#': return new OnlyIfAttacked();
 			case '*': return new OnlyIfNotAttacked();

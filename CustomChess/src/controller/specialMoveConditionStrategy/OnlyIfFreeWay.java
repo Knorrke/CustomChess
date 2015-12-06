@@ -1,4 +1,4 @@
-package controller.moveLogicStrategy;
+package controller.specialMoveConditionStrategy;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import model.Board;
 import model.Square;
 import model.pieces.Piece;
 
-public class OnlyIfFreeWay implements MoveLogicBehaviour {
+public class OnlyIfFreeWay implements SpecialMoveCondition {
 
 	private final static int X=0,Y=1;
 	

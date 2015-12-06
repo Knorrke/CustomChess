@@ -7,7 +7,7 @@ public class Rook extends Piece {
 	
 	@Override
 	public void initializeMoveLogic(){
-		MoveLogic ml = new MoveLogic(board, this, "n,0,F|0,n,F");
+		MoveLogic ml = new MoveLogic(board, this, "n,0;F|0,n;F");
 		ml.addBehavioursAutomatically();
 		moveLogic = ml;
 	}
