@@ -5,10 +5,22 @@ import java.util.HashMap;
 import model.pieces.Piece;
 import player.PlayerColor;
 
+/**
+ * Factory to create Pieces
+ * @author Benjamin
+ */
 public class PieceFactory {
 	
 	private static HashMap<String, Class<? extends Piece>> map = new HashMap<>();
 	
+	/**
+	 * Creates a new Piece of the specified class, with the specified properties
+	 * @param board Board holding the piece
+	 * @param className Class of piece to create as String
+	 * @param color Color of player controlling the piece
+	 * @param pos Position of Piece on Board
+	 * @return new piece
+	 */
 	public static Piece newPiece(Board board,String className, PlayerColor color, int[] pos){
 		Class<? extends Piece> pieceClass = loadClass(className);
 		try{
@@ -57,8 +69,6 @@ public class PieceFactory {
 		piece.setColor(color);
 		piece.setBoard(board);
 		piece.setPosition(pos);
-		piece.initializeMoveLogic();
-		piece.initializeView();
 	}
 
 }

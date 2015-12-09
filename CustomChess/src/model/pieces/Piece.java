@@ -15,6 +15,12 @@ public abstract class Piece implements MoveLogicInitializerInterface, ViewInitia
 	protected PieceViewInterface view;
 	protected Board board;
 	
+	
+	public Piece(){
+		initializeMoveLogic();
+		initializeView();
+	}
+	
 	/**
 	 * @return the color
 	 */
