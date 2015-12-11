@@ -12,7 +12,7 @@ public class OnlyCorrectDistance implements MovementCondition {
 	}
 
 	@Override
-	public boolean matchesMovementCondition(Board board, Piece piece, String rulepart, int[] newPos) {
+	public boolean matchesMovementCondition(Board board, Piece piece, int[] newPos) {
     	int[] pos = piece.getPosition();
 		for(int i = 0; i< pos.length; i++){
 			String distanceCondition = distanceConditions[i];

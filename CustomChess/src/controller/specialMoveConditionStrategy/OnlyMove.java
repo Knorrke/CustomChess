@@ -7,7 +7,7 @@ import player.PlayerColor;
 public class OnlyMove implements SpecialMoveCondition {
 
 	@Override
-	public boolean isMatchingSpecialCondition(Board board, Piece piece, String rulepart, int[] newPos) {
+	public boolean isMatchingSpecialCondition(Board board, Piece piece, int[] newPos) {
 		return !( board.isPieceOfColorOnSquare(PlayerColor.BLACK,newPos) 
 				|| board.isPieceOfColorOnSquare(PlayerColor.BLACK, newPos));
 	}

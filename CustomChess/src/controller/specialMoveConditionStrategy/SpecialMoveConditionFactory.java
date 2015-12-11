@@ -11,6 +11,7 @@ public class SpecialMoveConditionFactory {
 			case '*': return new OnlyIfNotAttacked();
 			case 'F': return new OnlyIfFreeWay();
 			case 'J': return new OnlyIfJumpOverPiece();
+			case 'N': return new OnlyIfNeverMoved();
 			default : return null;
 		}
 	}

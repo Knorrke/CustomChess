@@ -6,7 +6,7 @@ import model.pieces.Piece;
 public class OnlyCapture implements SpecialMoveCondition {
 
 	@Override
-	public boolean isMatchingSpecialCondition(Board board, Piece piece, String rulepart, int[] newPos) {
+	public boolean isMatchingSpecialCondition(Board board, Piece piece, int[] newPos) {
 		return board.isPieceOfColorOnSquare(piece.getColor().getOppositColor(), newPos);
 	}
 }

@@ -11,7 +11,7 @@ public class OnlyIfFreeWay implements SpecialMoveCondition {
 	private final static int X=0,Y=1;
 	
 	@Override
-	public boolean isMatchingSpecialCondition(Board board, Piece piece, String rulepart, int[] newPos) {
+	public boolean isMatchingSpecialCondition(Board board, Piece piece, int[] newPos) {
 		List<Square> squares = getSquaresBetween(board.getSquares(), piece.getPosition(), newPos);
 		for(Square square : squares){
 			if(square.hasPiece()){

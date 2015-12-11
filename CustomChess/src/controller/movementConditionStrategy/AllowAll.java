@@ -6,7 +6,7 @@ import model.pieces.Piece;
 public class AllowAll implements MovementCondition{
 
 	@Override
-	public boolean matchesMovementCondition(Board board, Piece piece, String rulepart, int[] newPos) {
+	public boolean matchesMovementCondition(Board board, Piece piece, int[] newPos) {
 		return true;
 	}
 }

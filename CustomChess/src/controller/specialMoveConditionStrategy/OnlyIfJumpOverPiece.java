@@ -8,7 +8,7 @@ public class OnlyIfJumpOverPiece implements SpecialMoveCondition {
 	private SpecialMoveCondition onlyFreeWayAdapter = SpecialMoveConditionFactory.getBehaviour('F');
 
 	@Override
-	public boolean isMatchingSpecialCondition(Board board, Piece piece, String rulepart, int[] newPos) {
-		return !onlyFreeWayAdapter.isMatchingSpecialCondition(board, piece, rulepart, newPos);
+	public boolean isMatchingSpecialCondition(Board board, Piece piece, int[] newPos) {
+		return !onlyFreeWayAdapter.isMatchingSpecialCondition(board, piece, newPos);
 	}
 }

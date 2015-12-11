@@ -67,7 +67,7 @@ public class MoveLogic implements MoveLogicInterface {
      */
 	private boolean allowedMovement(String movementCondition, int[] newPos) {
 		MovementCondition mc = movementConditionMap.get(movementCondition);
-    	return mc == null || mc.matchesMovementCondition(board, piece, movementCondition, newPos);
+    	return mc == null || mc.matchesMovementCondition(board, piece, newPos);
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class MoveLogic implements MoveLogicInterface {
     		String[] ruleparts = singleRule.split(";");
     		for(char condition : ruleparts[1].toCharArray()){ //for each special condition
     			SpecialMoveCondition smc = specialConditionMap.get(condition);
-    			if(smc != null && !smc.isMatchingSpecialCondition(board, piece, singleRule, newPos)){
+    			if(smc != null && !smc.isMatchingSpecialCondition(board, piece, newPos)){
     				return false;
         		}
     		}
@@ -120,13 +120,13 @@ public class MoveLogic implements MoveLogicInterface {
 	 * Automatically adds the MoveLogicBehaviours for the special conditions in the rule.
 	 */
 	public void addBehavioursAutomatically() {
-		for( String rulepart : rule.split("\\|")){
-			String[] ruleparts = rulepart.split(";");
+		for(String singleRule : rule.split("\\|")){
+			String[] ruleparts = singleRule.split(";");
 			
-			movementConditionMap.put(ruleparts[0],MovementConditionFactory.getBehaviour(ruleparts[0]));
+			addMovementCondition(ruleparts[0], MovementConditionFactory.getBehaviour(ruleparts[0]));
 			if(ruleparts.length>1){
 				for(char condition : ruleparts[1].toCharArray()){
-					specialConditionMap.put(condition,SpecialMoveConditionFactory.getBehaviour(condition));
+					addSpecialMoveCondition(condition, SpecialMoveConditionFactory.getBehaviour(condition));
 				}
 			}
 		}
