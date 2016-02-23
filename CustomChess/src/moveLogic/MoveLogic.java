@@ -1,13 +1,13 @@
-package controller;
+package moveLogic;
 
 import java.util.HashMap;
 
-import controller.movementConditionStrategy.MovementCondition;
-import controller.movementConditionStrategy.MovementConditionFactory;
-import controller.specialMoveConditionStrategy.SpecialMoveCondition;
-import controller.specialMoveConditionStrategy.SpecialMoveConditionFactory;
 import model.Board;
 import model.pieces.Piece;
+import moveLogic.movementConditionStrategy.MovementCondition;
+import moveLogic.movementConditionStrategy.MovementConditionFactory;
+import moveLogic.specialMoveConditionStrategy.SpecialMoveCondition;
+import moveLogic.specialMoveConditionStrategy.SpecialMoveConditionFactory;
 
 public class MoveLogic implements MoveLogicInterface {
 	private final Board board;
@@ -23,6 +23,7 @@ public class MoveLogic implements MoveLogicInterface {
 		this.rule = rule;
 		specialConditionMap = new HashMap<>();
 		movementConditionMap = new HashMap<>();
+		addBehavioursAutomatically();
 	}
 	
 	/**

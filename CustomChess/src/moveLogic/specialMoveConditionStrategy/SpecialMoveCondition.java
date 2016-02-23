@@ -1,4 +1,4 @@
-package controller.specialMoveConditionStrategy;
+package moveLogic.specialMoveConditionStrategy;
 
 import model.Board;
 import model.pieces.Piece;

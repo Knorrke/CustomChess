@@ -1,4 +1,4 @@
-package controller.specialMoveConditionStrategy;
+package moveLogic.specialMoveConditionStrategy;
 
 public class SpecialMoveConditionFactory {
 

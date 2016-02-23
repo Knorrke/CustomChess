@@ -1,4 +1,4 @@
-package controller.movementConditionStrategy;
+package moveLogic.movementConditionStrategy;
 
 public class MovementConditionFactory {
 
@@ -32,6 +32,6 @@ public class MovementConditionFactory {
 	 * @return
 	 */
 	private static boolean ruleAllowsDiagonal(String[] ruleparts) {
-		return ruleparts[0].equals(ruleparts[1]);
+		return ruleparts[0].equals("n") && ruleparts[1].equals("n");
 	}
 }
