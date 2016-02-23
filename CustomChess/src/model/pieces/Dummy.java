@@ -1,29 +1,21 @@
 package model.pieces;
 
-import java.awt.Graphics;
-
-import controller.MoveLogicInterface;
-import view.PieceViewInterface;
+import model.Board;
+import player.PlayerColor;
 
 public class Dummy extends Piece{
 
+	public Dummy(PlayerColor color, Board board, int[] pos) {
+		super(color, board, pos);
+	}
+
 	@Override
 	public void initializeMoveLogic() {
-		moveLogic = new MoveLogicInterface(){
-			@Override
-			public boolean moveCorrect(int[] newPos) {
-				return false;
-			}
-		};
+		setMoveLogic(pos-> false);
 	}
 
 	@Override
 	public void initializeView() {
-		view = new PieceViewInterface() {
-			@Override
-			public void drawPiece(Graphics g) {
-			}
-		};
+		setView(g->{});
 	}
-
 }

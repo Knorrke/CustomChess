@@ -1,19 +1,23 @@
 package model.pieces;
 
-import controller.MoveLogic;
+import model.Board;
+import moveLogic.MoveLogic;
+import player.PlayerColor;
 import view.PieceView;
 
 public class Bishop extends Piece {
 	
+	public Bishop(PlayerColor color, Board board, int[] pos) {
+		super(color, board, pos);
+	}
+
 	@Override
 	public void initializeMoveLogic(){
-		MoveLogic ml = new MoveLogic(board, this, "n,n;F");
-		ml.addBehavioursAutomatically();
-		moveLogic = ml;
+		setMoveLogic(new MoveLogic(getBoard(), this, "n,n;F"));
 	}
 	
 	@Override
 	public void initializeView() {
-		view = new PieceView(this, "bishop" + getColor() + ".png");
+		setView(new PieceView(this, "bishop" + getColor() + ".png"));
 	}
 }

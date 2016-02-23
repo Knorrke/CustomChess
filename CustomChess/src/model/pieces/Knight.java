@@ -1,19 +1,23 @@
 package model.pieces;
 
-import controller.MoveLogic;
+import model.Board;
+import moveLogic.MoveLogic;
+import player.PlayerColor;
 import view.PieceView;
 
 public class Knight extends Piece {
 	
+	public Knight(PlayerColor color, Board board, int[] pos) {
+		super(color, board, pos);
+	}
+
 	@Override
 	public void initializeMoveLogic(){
-		MoveLogic ml = new MoveLogic(board, this, "2,1|1,2");
-		ml.addBehavioursAutomatically();
-		moveLogic = ml;
+		setMoveLogic(new MoveLogic(getBoard(), this, "2,1|1,2"));
 	}
 	
 	@Override
 	public void initializeView() {
-		view = new PieceView(this, "knight" + getColor() + ".png");
+		setView(new PieceView(this, "knight" + getColor() + ".png"));
 	}
 }

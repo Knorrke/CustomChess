@@ -1,22 +1,36 @@
 package model.pieces;
 
-import controller.MoveLogicInterface;
+import java.awt.Graphics;
+
 import model.Board;
 import model.pieces.interfaces.MoveLogicInitializerInterface;
 import model.pieces.interfaces.ViewInitializerInterface;
+import moveLogic.MoveLogicInterface;
 import player.PlayerColor;
 import view.PieceViewInterface;
 
+/**
+ * Abstract class for all Pieces, provides color, board and position
+ * and an accesspoint to the MoveLogic.
+ * 
+ * Subclasses must implement the methods of {@link MoveLogicInitializerInterface}
+ * and {@link ViewInitializerInterface}
+ * @author Benjamin
+ */
 public abstract class Piece implements MoveLogicInitializerInterface, ViewInitializerInterface{
 	
 	protected PlayerColor color;
 	protected int posX, posY;
 	protected MoveLogicInterface moveLogic;
-	protected PieceViewInterface view;
-	protected Board board;
+	private PieceViewInterface view;
+	private Board board;
+	private boolean moved;
 	
-	
-	public Piece(){
+	public Piece(PlayerColor color, Board board, int[] pos){
+		this.color = color;
+		this.board = board;
+		setPosition(pos);
+		moved = false;
 		initializeMoveLogic();
 		initializeView();
 	}
@@ -64,6 +78,14 @@ public abstract class Piece implements MoveLogicInitializerInterface, ViewInitia
 			this.posY = pos[1];
 		}
 	}
+
+	/**
+	 * @return the board
+	 */
+	public Board getBoard() {
+		return board;
+	}
+	
 	/**
 	 * @param board the board to set
 	 */
@@ -73,5 +95,31 @@ public abstract class Piece implements MoveLogicInitializerInterface, ViewInitia
 
 	public boolean moveCorrect(int[] newPos) {
 		return moveLogic.moveCorrect(newPos);
+	}
+	
+	public void setMoveLogic(MoveLogicInterface moveLogic){
+		this.moveLogic = moveLogic;
+	}
+	
+	public void draw(Graphics g){
+		view.drawPiece(g);
+	}
+	
+	public void setView(PieceViewInterface view){
+		this.view = view;
+	}
+
+	/**
+	 * @return the moved
+	 */
+	public boolean isMoved() {
+		return moved;
+	}
+
+	/**
+	 * @param moved the moved to set
+	 */
+	public void setMoved(boolean moved) {
+		this.moved = moved;
 	}
 }
