@@ -6,6 +6,9 @@ public class Square {
 
 	private Piece piece;
 
+	public Square() {
+		piece = null;
+	}
 	/**
 	 * @return the piece
 	 */

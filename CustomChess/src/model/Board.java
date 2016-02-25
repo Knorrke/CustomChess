@@ -11,6 +11,11 @@ public class Board {
 	
 	public Board(int width, int height){
 		squares = new Square[width][height];
+		for(int i=0; i<width; i++){
+			for(int j=0; j<height; j++){
+				squares[i][j] = new Square();
+			}
+		}
 	}
 
 	public Square[][] getSquares() {
@@ -51,5 +56,20 @@ public class Board {
 		}finally{
 			sq.setPiece(piece);
 		}
+	}
+
+	public void setPieceToNewPosition(Piece piece, int[] newPos) {
+		int[] oldPosition = piece.getPosition();
+		Square oldSquareOfPiece = squares[oldPosition[X]][oldPosition[Y]];
+		
+		assert oldSquareOfPiece.getPiece() == piece;
+		
+		piece.setPosition(newPos);
+		squares[newPos[X]][newPos[Y]].setPiece(piece);
+		oldSquareOfPiece.setPiece(null);
+	}
+	
+	public Piece getPieceOfSquare(int[] pos){
+		return squares[pos[X]][pos[Y]].getPiece();
 	}
 }

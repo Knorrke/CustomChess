@@ -1,5 +1,7 @@
 package model.pieces.decorator;
 
+import java.awt.Graphics;
+
 import model.pieces.Piece;
 
 public abstract class Decorator extends Piece {
@@ -11,17 +13,33 @@ public abstract class Decorator extends Piece {
 	}
 	
 	@Override
-	public boolean moveCorrect(int[] newPos) {
+	final public boolean moveCorrect(int[] newPos) {
 		return super.moveCorrect(newPos) && wrappedPiece.moveCorrect(newPos);
 	}
 	
+	@Override
+	final public void draw(Graphics g) {
+		super.draw(g);
+		wrappedPiece.draw(g);
+		
+		//TODO: Add possibility to draw on top of piece.
+	}
+	
 	 @Override
+	 /**
+	  * Default implementation. Uses view of wrapped Piece. 
+	  * Override this to add a customized view
+	  */
 	public void initializeView() {
-		setView(wrappedPiece::draw);
+		setView(g->{});
 	}
 	 
 	@Override
+	/**
+	 * Default implementation. No additional check.
+	 * Override this to add a customized move logic
+	 */
 	public void initializeMoveLogic(){
-		setMoveLogic(wrappedPiece::moveCorrect);
+		setMoveLogic(pos->true);
 	}
 }

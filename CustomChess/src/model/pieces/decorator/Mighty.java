@@ -13,9 +13,4 @@ public class Mighty extends Decorator{
 	public void initializeMoveLogic() {
 		setMoveLogic(new MoveLogic(getBoard(), this,"n,m;!"));
 	}
-
-	@Override
-	public void initializeView() {
-		setView(wrappedPiece::draw);
-	}
 }

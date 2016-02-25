@@ -21,7 +21,7 @@ public abstract class Piece implements MoveLogicInitializerInterface, ViewInitia
 	
 	protected PlayerColor color;
 	protected int posX, posY;
-	protected MoveLogicInterface moveLogic;
+	private MoveLogicInterface moveLogic;
 	private PieceViewInterface view;
 	private Board board;
 	private boolean moved;
