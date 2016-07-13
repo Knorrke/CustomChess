@@ -1,7 +1,5 @@
 package model.pieces;
 
-import java.awt.Graphics;
-
 import model.Board;
 import model.pieces.interfaces.MoveLogicInitializerInterface;
 import model.pieces.interfaces.ViewInitializerInterface;
@@ -101,8 +99,8 @@ public abstract class Piece implements MoveLogicInitializerInterface, ViewInitia
 		this.moveLogic = moveLogic;
 	}
 	
-	public void draw(Graphics g){
-		view.drawPiece(g);
+	public void draw(){
+		view.drawPiece();
 	}
 	
 	public void setView(PieceViewInterface view){
@@ -121,5 +119,13 @@ public abstract class Piece implements MoveLogicInitializerInterface, ViewInitia
 	 */
 	public void setMoved(boolean moved) {
 		this.moved = moved;
+	}
+
+	/**
+	 * Returns the class. Override this to return default types.
+	 * @return
+	 */
+	public Class<?> getType() {
+		return this.getClass();
 	}
 }

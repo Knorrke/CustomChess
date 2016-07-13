@@ -16,6 +16,6 @@ public class Dummy extends Piece{
 
 	@Override
 	public void initializeView() {
-		setView(g->{});
+		setView(()->{});
 	}
 }

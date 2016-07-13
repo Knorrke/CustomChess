@@ -3,7 +3,7 @@ package model.pieces.decorator;
 import model.pieces.Piece;
 import moveLogic.MoveLogic;
 
-public class Mighty extends Decorator{
+public class Mighty extends AdditionalMoveConditionDecorator {
 
 	public Mighty(Piece wrappedPiece) {
 		super(wrappedPiece);
