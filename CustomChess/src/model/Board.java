@@ -40,13 +40,12 @@ public class Board {
 		}
 		Square sq = squares[pos[X]][pos[Y]];
 		Piece piece = sq.getPiece();
-		
 		try{
-			sq.setPiece(PieceFactory.newPiece(this, "model.pieces.Dummy", attackerColor.getOppositColor(), pos));
+			sq.setPiece(PieceFactory.newPiece(this, "Dummy", piece.getColor(), pos));
 			for(int i=0; i<squares.length; i++){
 				for(int j=0; j<squares.length; j++){
-					if(squares[i][j].getPiece().moveCorrect(pos)){
-						
+					if(isPieceOfColorOnSquare(attackerColor, new int[] {i,j}) && 
+							squares[i][j].getPiece().moveCorrect(pos)){
 						return true;
 					}
 				}
@@ -63,13 +62,28 @@ public class Board {
 		Square oldSquareOfPiece = squares[oldPosition[X]][oldPosition[Y]];
 		
 		assert oldSquareOfPiece.getPiece() == piece;
-		
 		piece.setPosition(newPos);
 		squares[newPos[X]][newPos[Y]].setPiece(piece);
-		oldSquareOfPiece.setPiece(null);
+		if(!oldPosition.equals(newPos)) {
+			oldSquareOfPiece.setPiece(null);
+		}
 	}
 	
 	public Piece getPieceOfSquare(int[] pos){
 		return squares[pos[X]][pos[Y]].getPiece();
+	}
+	
+	/**
+	 * Adds the piece its position if this is possible
+	 * Throws IllegalArgumentException if square is already taken.
+	 * @param piece
+	 */
+	public void addPiece(Piece piece) {
+		int[] pos = piece.getPosition();
+		if(squares[pos[X]][pos[Y]].hasPiece()) {
+			throw new IllegalArgumentException("There is already a piece on this square");
+		}
+		
+		squares[pos[X]][pos[Y]].setPiece(piece);
 	}
 }

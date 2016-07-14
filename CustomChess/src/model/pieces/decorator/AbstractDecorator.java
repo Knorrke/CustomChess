@@ -1,5 +1,7 @@
 package model.pieces.decorator;
 
+import java.util.Set;
+
 import model.pieces.Piece;
 
 public abstract class AbstractDecorator extends Piece {
@@ -33,9 +35,11 @@ public abstract class AbstractDecorator extends Piece {
 	
 	@Override
 	/**
-	 * Default implementation. Use type of wrappedPiece
+	 * Returns a set of types of the wrapped piece as well as the runtime class of this decorator
 	 */
-	public Class<?> getType() {
-		return wrappedPiece.getType();
+	public Set<Class<?>> getType() {
+		Set<Class<?>> set = wrappedPiece.getType();
+		set.add(this.getClass());
+		return set;
 	}
 }

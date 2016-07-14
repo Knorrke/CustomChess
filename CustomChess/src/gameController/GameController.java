@@ -2,6 +2,7 @@ package gameController;
 
 import java.util.ArrayList;
 
+import gameController.gameConditionsStrategy.GameCondition;
 import model.Board;
 import model.pieces.Piece;
 import player.PlayerColor;
@@ -9,6 +10,8 @@ import player.PlayerColor;
 public abstract class GameController {
 	
 	private ArrayList<PlayerColor> turnOrder = new ArrayList<>();
+	protected ArrayList<GameCondition> gameIntegrityConditions = new ArrayList<>();
+	
 	private final Board board;
 	
 	public GameController(PlayerColor startingPlayer){
@@ -27,9 +30,16 @@ public abstract class GameController {
 		return getCurrentPlayer();
 	}
 	
+	/**
+	 * Tries moving the specified piece to the specified position. 
+	 * Returns true if successfull, false otherwise.
+	 * @param piece Piece to move
+	 * @param newPos Position to move the piece to
+	 * @return
+	 */
 	public boolean move(Piece piece, int[] newPos){
 		assert piece.getBoard() == board;
-		if(piece.getColor() == getCurrentPlayer() && piece.moveCorrect(newPos)) {
+		if(piece.getColor() == getCurrentPlayer() && piece.moveCorrect(newPos) && integrityCheck(piece, newPos)) {
 			board.setPieceToNewPosition(piece,newPos);
 			nextPlayer();
 			return true;
@@ -40,6 +50,21 @@ public abstract class GameController {
 	
 	protected abstract Board setUpBoard();
 
+	/**
+	 * Check additional conditions for the game. 
+	 * This is called when the specified piece tries to move.
+	 * @param piece	The piece being moved
+	 * @param newPos The new position
+	 * @return
+	 */
+	public boolean integrityCheck(Piece piece, int[] newPos) {
+		boolean integrityEnsured = true;
+		for(GameCondition cond : gameIntegrityConditions) {
+			integrityEnsured &= cond.isGameIntegrityEnsured(board, piece, newPos);
+		}
+		return integrityEnsured;
+	}
+	
 	/**
 	 * @return the board
 	 */

@@ -27,6 +27,6 @@ public class KnightRiding extends AdditionalMoveAllowanceDecorator {
 	}
 	
 	private boolean isKnight(Piece piece) {
-		return piece.getType().equals(Knight.class);
+		return piece.getType().contains(Knight.class);
 	}
 }

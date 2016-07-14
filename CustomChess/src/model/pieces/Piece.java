@@ -1,5 +1,8 @@
 package model.pieces;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import model.Board;
 import model.pieces.interfaces.MoveLogicInitializerInterface;
 import model.pieces.interfaces.ViewInitializerInterface;
@@ -122,10 +125,13 @@ public abstract class Piece implements MoveLogicInitializerInterface, ViewInitia
 	}
 
 	/**
-	 * Returns the class. Override this to return default types.
+	 * Returns all the classes of this piece. Override this to return default types.
 	 * @return
 	 */
-	public Class<?> getType() {
-		return this.getClass();
+	public Set<Class<?>> getType() {
+		Set<Class<?>> set = new HashSet<>();
+		set.add(this.getClass());
+		set.add(Piece.class);
+		return set;
 	}
 }
