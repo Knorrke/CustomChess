@@ -10,6 +10,7 @@ import model.pieces.Pawn;
 import model.pieces.Piece;
 import model.pieces.Queen;
 import model.pieces.Rook;
+import model.pieces.decorator.DecoratedPieceFactory;
 import player.PlayerColor;
 
 /**
@@ -26,6 +27,35 @@ public class PieceFactory {
 	 * 
 	 * @param board
 	 *            Board holding the piece
+	 * @param name
+	 *            Name of piece to create as String
+	 * @param color
+	 *            Color of player controlling the piece
+	 * @param pos
+	 *            Position of Piece on Board
+	 * @return new piece
+	 */
+	public static Piece newPiece(Board board, String className, PlayerColor color, int[] pos) {
+		if (className.contains(" ")) {
+			String[] decorators = className.split(" ");
+
+			Piece piece = getPiece(board, decorators[decorators.length - 1], color, pos);
+
+			for (int i = decorators.length - 2; i >= 0; i--) {
+				piece = DecoratedPieceFactory.newDecoratedPiece(decorators[i], piece);
+			}
+
+			return piece;
+		} else {
+			return getPiece(board, className, color, pos);
+		}
+	}
+
+	/**
+	 * Creates a new Piece of the specified class, with the specified properties
+	 * 
+	 * @param board
+	 *            Board holding the piece
 	 * @param className
 	 *            Class of piece to create as String
 	 * @param color
@@ -34,40 +64,31 @@ public class PieceFactory {
 	 *            Position of Piece on Board
 	 * @return new piece
 	 */
-	public static Piece newPiece(Board board, String className, PlayerColor color, int[] pos) {
-		Piece piece = null;
+	private static Piece getPiece(Board board, String className, PlayerColor color, int[] pos) {
 		switch (className) {
 		case "Bishop":
-			piece = new Bishop(color, board, pos);
-			break;
+			return new Bishop(color, board, pos);
 		case "Dummy":
-			piece = new Dummy(color, board, pos);
-			break;
+			return new Dummy(color, board, pos);
 		case "King":
-			piece = new King(color, board, pos);
-			break;
+			return new King(color, board, pos);
 		case "Knight":
-			piece = new Knight(color, board, pos);
-			break;
+			return new Knight(color, board, pos);
 		case "Pawn":
-			piece = new Pawn(color, board, pos);
-			break;
+			return new Pawn(color, board, pos);
 		case "Queen":
-			piece = new Queen(color, board, pos);
-			break;
+			return new Queen(color, board, pos);
 		case "Rook":
-			piece = new Rook(color, board, pos);
-			break;
+			return new Rook(color, board, pos);
 		default:
 			Class<? extends Piece> pieceClass = loadClass(className);
 			try {
-				piece = pieceClass.newInstance();
+				return pieceClass.newInstance();
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
+				return new Dummy(color, board, pos);
 			}
-			break;
 		}
-		return piece;
 	}
 
 	/**

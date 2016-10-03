@@ -134,4 +134,11 @@ public abstract class Piece implements MoveLogicInitializerInterface, ViewInitia
 		set.add(Piece.class);
 		return set;
 	}
+
+	/**
+	 * @return the moveLogic
+	 */
+	public MoveLogicInterface getMoveLogic() {
+		return moveLogic;
+	}
 }

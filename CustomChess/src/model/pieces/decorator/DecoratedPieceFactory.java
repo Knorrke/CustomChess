@@ -4,15 +4,12 @@ import model.pieces.Piece;
 
 public class DecoratedPieceFactory {
 
-	public static Piece newDecoratedPiece(String decorators, Piece wrappedPiece) {
-		for(String decorator : decorators.split(" ")) {
-			switch(decorator){
-				case "Mighty": wrappedPiece = new Mighty(wrappedPiece);
-				case "KnightRiding": wrappedPiece = new KnightRiding(wrappedPiece);
-				default: break;
-			}
+	public static Piece newDecoratedPiece(String decorator, Piece wrappedPiece) {
+		switch(decorator){
+			case "Mighty": return new Mighty(wrappedPiece);
+			case "KnightRiding": return new KnightRiding(wrappedPiece);
+			case "AxeSwinging": return new AxeSwinging(wrappedPiece);
+			default: return wrappedPiece;
 		}
-		
-		return wrappedPiece;
 	}
 }
