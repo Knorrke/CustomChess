@@ -14,7 +14,7 @@ public class StandardGameController extends GameController {
 
 	@Override
 	public Board setUpBoard() {
-		Board board = new Board(8,8);
+		Board board = new Board(this,8,8);
 		
 		for(int i=0; i<8; i++){
 			board.addPiece(PieceFactory.newPiece(board,"Pawn",PlayerColor.WHITE,new int[] {i,1}));

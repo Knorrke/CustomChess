@@ -1,13 +1,17 @@
 package model;
 
 import model.pieces.Piece;
+import view.SquareView;
+import view.ViewInterface;
 
-public class Square {
+public class Square implements Drawable{
 
 	private Piece piece;
+	private ViewInterface view;
 
-	public Square() {
+	public Square(SquareColor color) {
 		piece = null;
+		view = new SquareView(this, color);
 	}
 	/**
 	 * @return the piece
@@ -25,6 +29,10 @@ public class Square {
 
 	public boolean hasPiece() {
 		return this.piece != null;
+	}
+	@Override
+	public void draw() {
+		view.draw();
 	}
 	
 }

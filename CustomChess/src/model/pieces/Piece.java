@@ -4,11 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import model.Board;
+import model.Drawable;
 import model.pieces.interfaces.MoveLogicInitializerInterface;
 import model.pieces.interfaces.ViewInitializerInterface;
 import moveLogic.MoveLogicInterface;
 import player.PlayerColor;
-import view.PieceViewInterface;
+import view.ViewInterface;
 
 /**
  * Abstract class for all Pieces, provides color, board and position
@@ -18,12 +19,12 @@ import view.PieceViewInterface;
  * and {@link ViewInitializerInterface}
  * @author Benjamin
  */
-public abstract class Piece implements MoveLogicInitializerInterface, ViewInitializerInterface{
+public abstract class Piece implements MoveLogicInitializerInterface, ViewInitializerInterface, Drawable{
 	
 	protected PlayerColor color;
 	protected int posX, posY;
 	private MoveLogicInterface moveLogic;
-	private PieceViewInterface view;
+	private ViewInterface view;
 	private Board board;
 	private boolean moved;
 	
@@ -102,11 +103,12 @@ public abstract class Piece implements MoveLogicInitializerInterface, ViewInitia
 		this.moveLogic = moveLogic;
 	}
 	
+	@Override
 	public void draw(){
-		view.drawPiece();
+		view.draw();
 	}
 	
-	public void setView(PieceViewInterface view){
+	public void setView(ViewInterface view){
 		this.view = view;
 	}
 

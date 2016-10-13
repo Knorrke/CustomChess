@@ -2,7 +2,7 @@ package view;
 
 import model.pieces.Piece;
 
-public class PieceView implements PieceViewInterface {
+public class PieceView implements ViewInterface {
 	
 	//private Image pieceImage;
 	private Piece piece;
@@ -13,8 +13,8 @@ public class PieceView implements PieceViewInterface {
 	}
 
 	@Override
-	public void drawPiece() {
-		System.out.println(piece.toString());
+	public void draw() {
+		System.out.print(piece.getClass().getSimpleName().charAt(0));
 		//TODO: view
 	}
 }

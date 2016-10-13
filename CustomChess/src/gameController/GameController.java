@@ -21,7 +21,7 @@ public abstract class GameController {
 
 		board = setUpBoard();
 	}
-
+	
 	public PlayerColor getCurrentPlayer() {
 		return turnOrder.get(0);
 	}
@@ -62,7 +62,11 @@ public abstract class GameController {
 	 *            Position to move piece to
 	 */
 	public boolean move(int[] from, int[] to) {
-		return move(board.getPieceOfSquare(from), to);
+		if(board.isPieceOfColorOnSquare(getCurrentPlayer(), from)) {
+			return move(board.getPieceOfSquare(from), to);
+		} else {
+			return false;
+		}
 	}
 
 	protected abstract Board setUpBoard();

@@ -12,6 +12,7 @@ public class SpecialMoveConditionFactory {
 			case 'F': return new OnlyIfFreeWay();
 			case 'J': return new OnlyIfJumpOverPiece();
 			case 'N': return new OnlyIfNeverMoved();
+			case 'R': return new Castling();
 			default : return null;
 		}
 	}
