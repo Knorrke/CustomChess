@@ -18,7 +18,9 @@ public class MoveLogicParser {
 
 			String[] ruleParts = singleRuleString.split(";");
 			MovementCondition mc = MovementConditionFactory.getBehaviour(ruleParts[0]);
-			SpecialMoveCondition smc = SpecialMoveConditionFactory.getBehaviour(ruleParts[1]);
+			SpecialMoveCondition smc = ruleParts.length > 1
+					? SpecialMoveConditionFactory.getBehaviour(ruleParts[1])
+					: (b,p,n)->true;
 			List<AdditionalAction> actions = ruleParts.length > 2 
 					? AdditionalActionFactory.getActions(ruleParts[2]) 
 					: new ArrayList<>();
