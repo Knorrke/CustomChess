@@ -1,6 +1,9 @@
 package gameController;
 
-import gameController.gameConditionsStrategy.MightyNotAttacked;
+
+import static helper.Helper.*;
+import gameController.gameConditionsStrategy.EndConditions.MateConditions;
+import gameController.gameConditionsStrategy.IntegrityConditions.MightyNotAttacked;
 import model.Board;
 import model.PieceFactory;
 import player.PlayerColor;
@@ -10,6 +13,7 @@ public class StandardGameController extends GameController {
 	public StandardGameController() {
 		super(PlayerColor.WHITE);
 		super.addIntegrityConditions(new MightyNotAttacked());
+		super.addEndConditions(new MateConditions());
 	}
 
 	@Override
@@ -43,5 +47,26 @@ public class StandardGameController extends GameController {
 		board.addPiece(PieceFactory.newPiece(board, "Mighty King", PlayerColor.BLACK, new int[] {4,7}));
 		
 		return board;
+	}
+	
+	@Override
+	protected void endHook() {
+		console.print("Game Over. ");
+		switch(state) {
+		case BLACKWIN:
+			console.println("Black wins!");
+			break;
+		case DRAW:
+			console.println("Draw!");
+			break;
+		case RUNNING:
+			console.println("Wait... no it is not... my bad!");
+			break;
+		case WHITEWIN:
+			console.println("White wins!");
+			break;
+		default:
+			break;
+		}
 	}
 }

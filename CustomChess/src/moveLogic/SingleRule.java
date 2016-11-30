@@ -5,6 +5,7 @@ import java.util.List;
 import gameController.GameController;
 import model.Board;
 import model.pieces.Piece;
+import moveLogic.additionalActions.AdditionalAction;
 import moveLogic.movementConditionStrategy.MovementCondition;
 import moveLogic.specialMoveConditionStrategy.SpecialMoveCondition;
 
@@ -28,17 +29,22 @@ public class SingleRule {
 	}
 	
 	public boolean matches(int[] newPos) {
-		return moveCondition.matchesMovementCondition(board, piece, newPos)
+		boolean correct = moveCondition.matchesMovementCondition(board, piece, newPos)
 				&& specialMoveCondition.isMatchingSpecialCondition(board, piece, newPos);
+		if(correct && !additionalActions.isEmpty()) {
+			board.registerAction(newPos, additionalActions);
+		}
+		
+		return correct;
 	}
 	
 	public List<AdditionalAction> getAdditionalActions() {
 		return additionalActions;
 	}
 	
-	public void executeAdditionalActions(GameController game) {
+	public void executeAdditionalActions(GameController game, Piece piece, int[] newPos) {
 		for(AdditionalAction action : additionalActions) {
-			action.execute(game);
+			action.execute(game, piece, newPos);
 		}
 	}
 }

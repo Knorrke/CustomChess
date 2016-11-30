@@ -1,6 +1,12 @@
 package view;
 
+import static helper.Helper.console;
+
+import com.diogonunes.jcdp.color.api.Ansi.Attribute;
+import com.diogonunes.jcdp.color.api.Ansi.FColor;
+
 import model.pieces.Piece;
+import player.PlayerColor;
 
 public class PieceView implements ViewInterface {
 	
@@ -14,7 +20,18 @@ public class PieceView implements ViewInterface {
 
 	@Override
 	public void draw() {
-		System.out.print(piece.getClass().getSimpleName().charAt(0));
-		//TODO: view
+		String name = "";
+		console.setAttribute(Attribute.BOLD);
+		console.setForegroundColor(piece.getColor() == PlayerColor.WHITE ? FColor.BLUE : FColor.RED);
+		switch(piece.getClass().getSimpleName()) {
+		case "Rook" : name = "R"; break;
+		case "King" : name = "K"; break;
+		case "Knight" : name = "N"; break;
+		case "Queen" : name = "Q"; break;
+		case "Pawn" : name = "P"; break;
+		case "Bishop": name = "B"; break;
+		}
+		console.print(name);
+		console.setAttribute(Attribute.CLEAR);
 	}
 }

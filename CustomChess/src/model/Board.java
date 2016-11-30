@@ -4,8 +4,14 @@ import static helper.Helper.X;
 import static helper.Helper.Y;
 import static helper.Helper.pos;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import gameController.GameController;
 import model.pieces.Piece;
+import moveLogic.additionalActions.AdditionalAction;
 import player.PlayerColor;
 import view.BoardView;
 import view.ViewInterface;
@@ -13,8 +19,14 @@ import view.ViewInterface;
 public class Board implements Drawable {
 	private Square[][] squares;
 	private ViewInterface view;
-	private final GameController gameController;
+	private Map<int[], List<AdditionalAction>> actionsThisMove = new HashMap<>();
+	private GameController game;
 
+	public Board(GameController game, int width, int height) {
+		this(width, height);
+		this.game = game;
+	}
+	
 	public Board(int width, int height) {
 		squares = new Square[width][height];
 		for (int i = 0; i < width; i++) {
@@ -23,22 +35,6 @@ public class Board implements Drawable {
 			}
 		}
 		view = new BoardView(this);
-		Board that = this;
-		this.gameController = new GameController(PlayerColor.WHITE) {
-			@Override
-			protected Board setUpBoard() {return that;}
-		};
-	}
-	
-	public Board(GameController gameController, int width, int height) {
-		squares = new Square[width][height];
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-				squares[i][j] = new Square((i + j) % 2 == 0 ? SquareColor.BLACK : SquareColor.WHITE);
-			}
-		}
-		view = new BoardView(this);
-		this.gameController = gameController;
 	}
 
 	public Square[][] getSquares() {
@@ -92,6 +88,17 @@ public class Board implements Drawable {
 		}
 	}
 
+	public void executeMove(GameController gameController, Piece piece, int[] newPos) {
+		setPieceToNewPosition(piece, newPos);
+		piece.setMoved(true);
+		if(actionsThisMove.containsKey(newPos)) {
+			for(AdditionalAction action : actionsThisMove.get(newPos)) {
+				action.execute(gameController, piece, newPos);
+			}
+		}
+		actionsThisMove = new HashMap<>();
+	}
+	
 	public Piece getPieceOfSquare(int[] pos) {
 		return squares[pos[X]][pos[Y]].getPiece();
 	}
@@ -141,8 +148,25 @@ public class Board implements Drawable {
 			addPiece(piece);
 		}
 	}
+
+	public void registerAction(int[] newPos, List<AdditionalAction> additionalActions) {
+		actionsThisMove.put(newPos, additionalActions);
+	}
 	
 	public GameController getGameController() {
-		return gameController;
+		return game;
+	}
+
+	public ArrayList<Piece> getAllPieces() {
+		ArrayList<Piece> pieces = new ArrayList<>();
+		for (Square[] row : getSquares()) {
+			for(Square sq : row) {
+				Piece piece = sq.getPiece();
+				if(piece != null) {
+					pieces.add(piece);
+				}
+			}
+		}
+		return pieces;
 	}
 }

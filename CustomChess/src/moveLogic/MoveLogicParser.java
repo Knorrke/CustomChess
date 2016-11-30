@@ -5,6 +5,8 @@ import java.util.List;
 
 import model.Board;
 import model.pieces.Piece;
+import moveLogic.additionalActions.AdditionalAction;
+import moveLogic.additionalActions.AdditionalActionFactory;
 import moveLogic.movementConditionStrategy.MovementCondition;
 import moveLogic.movementConditionStrategy.MovementConditionFactory;
 import moveLogic.specialMoveConditionStrategy.SpecialMoveCondition;

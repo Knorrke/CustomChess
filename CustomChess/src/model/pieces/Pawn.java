@@ -13,7 +13,7 @@ public class Pawn extends Piece {
 
 	@Override
 	public void initializeMoveLogic(){
-		setMoveLogic(new MoveLogic(getBoard(), this, "1,+1;C|0,+1;M|0,+2;MBF"));
+		setMoveLogic(new MoveLogic(getBoard(), this, "1,+1;C;P|1,+1;E;E|0,+1;M;P|0,+2;MNF"));
 	}
 	
 	@Override

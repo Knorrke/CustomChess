@@ -1,5 +1,9 @@
 package view;
 
+import static helper.Helper.*;
+
+import com.diogonunes.jcdp.color.api.Ansi.BColor;
+
 import model.Square;
 import model.SquareColor;
 import model.pieces.Piece;
@@ -17,25 +21,12 @@ public class SquareView implements ViewInterface {
 	@Override
 	public void draw() {
 		Piece piece = square.getPiece();
-		switch (color) {
-		case BLACK:
-			System.out.print("=");
-			if (piece != null)
-				piece.draw();
-			else
-				System.out.print("=");
-			System.out.print("=");
-			break;
-		case WHITE:
-			System.out.print(" ");
-			if (piece != null)
-				piece.draw();
-			else
-				System.out.print(" ");
-			System.out.print(" ");
-			break;
-		default:
-			break;
+		console.setBackgroundColor(color == SquareColor.WHITE ? BColor.WHITE : BColor.BLACK);
+		if (piece != null) {
+			console.print(" ");
+			piece.draw();
+		} else {
+			console.print("  ");
 		}
 	}
 }

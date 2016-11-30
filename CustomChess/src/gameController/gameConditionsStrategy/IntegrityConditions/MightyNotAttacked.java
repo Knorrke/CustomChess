@@ -1,4 +1,4 @@
-package gameController.gameConditionsStrategy;
+package gameController.gameConditionsStrategy.IntegrityConditions;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,7 @@ import model.Square;
 import model.pieces.Piece;
 import model.pieces.decorator.Mighty;
 
-public class MightyNotAttacked implements GameCondition {
+public class MightyNotAttacked implements GameIntegrityCondition {
 
 	@Override
 	public boolean isGameIntegrityEnsured(Board board, Piece piece, int[] newPos) {

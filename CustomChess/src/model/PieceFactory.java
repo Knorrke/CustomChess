@@ -1,5 +1,6 @@
 package model;
 
+import static helper.Helper.console;
 import java.util.HashMap;
 
 import model.pieces.Bishop;
@@ -85,7 +86,7 @@ public class PieceFactory {
 			try {
 				return pieceClass.newInstance();
 			} catch (InstantiationException | IllegalAccessException e) {
-				e.printStackTrace();
+				console.errorPrintln("Instantiaton Exception in PieceFactory");
 				return new Dummy(color, board, pos);
 			}
 		}
@@ -106,7 +107,9 @@ public class PieceFactory {
 				// FileLoader loader = new FileLoader();
 				// TODO: Read description of piece from game file and create
 				// CustomPiece
-				e.printStackTrace();
+				// e.printStackTrace();
+				console.errorPrintln("Unknown class " + className);
+				return Dummy.class;
 			}
 		}
 		return map.get(className);

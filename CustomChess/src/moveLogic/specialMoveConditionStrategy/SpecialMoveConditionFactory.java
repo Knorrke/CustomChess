@@ -6,6 +6,37 @@ import java.util.List;
 
 public class SpecialMoveConditionFactory {
 
+	public static SpecialMoveCondition getBehaviour(char condition) {
+		switch (condition) {
+		case 'C':
+			return new OnlyCapture();
+		case 'M':
+			return new OnlyMove();
+		case '!':
+			return new OnlyToNotAttackedSquare();
+		case '#':
+			return new OnlyIfAttacked();
+		case '*':
+			return new OnlyIfNotAttacked();
+		case 'F':
+			return new OnlyIfFreeWay();
+		case 'J':
+			return new OnlyIfJumpOverPiece();
+		case 'N':
+			return new OnlyIfNeverMoved();
+		case 'R':
+			return new Castling();
+		case 'E':
+			return new EnPassant();
+		case '(':
+		case ')':
+		case '+':
+		case '&':
+		default:
+			return null;
+		}
+	}
+	
 	public static SpecialMoveCondition getBehaviour(String conditionPart) {
 		SpecialMoveConditionParser parser = new SpecialMoveConditionParser(conditionPart);
 		return parser.parse();
@@ -31,6 +62,7 @@ public class SpecialMoveConditionFactory {
 					if (next != null)
 						list.add(next);
 				}
+				progress = condition.length();
 				return new And(list);
 			} else {
 				for (char c : condition.substring(progress, nextSpecialChar).toCharArray()) {
@@ -38,7 +70,7 @@ public class SpecialMoveConditionFactory {
 					if (next != null)
 						list.add(next);
 				}
-				progress = nextSpecialChar;
+				progress = nextSpecialChar + 1;
 
 				if (condition.charAt(nextSpecialChar) == '(') {
 					list.add(parse());
@@ -56,34 +88,5 @@ public class SpecialMoveConditionFactory {
 			return Arrays.stream(is).reduce(-1, Math::max);
 		}
 
-	}
-
-	public static SpecialMoveCondition getBehaviour(char condition) {
-		switch (condition) {
-		case 'C':
-			return new OnlyCapture();
-		case 'M':
-			return new OnlyMove();
-		case '!':
-			return new OnlyToNotAttackedSquare();
-		case '#':
-			return new OnlyIfAttacked();
-		case '*':
-			return new OnlyIfNotAttacked();
-		case 'F':
-			return new OnlyIfFreeWay();
-		case 'J':
-			return new OnlyIfJumpOverPiece();
-		case 'N':
-			return new OnlyIfNeverMoved();
-		case 'R':
-			return new Castling();
-		case '(':
-		case ')':
-		case '+':
-		case '&':
-		default:
-			return null;
-		}
 	}
 }

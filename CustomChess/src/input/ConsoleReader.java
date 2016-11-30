@@ -1,5 +1,6 @@
 package input;
 
+import static helper.Helper.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -46,17 +47,17 @@ public class ConsoleReader {
 				String[] tmp = elements[i].split(",");
 				positions[i] = new int[] {Integer.parseInt(tmp[0]) - 1, Integer.parseInt(tmp[1]) - 1};
 			}else {
-				char col = elements[i].charAt(0);
-				if( col >= 'a' && col < 'a' + gameController.getBoard().getSquares().length){
-					positions[i] = new int[] {col-'a', Integer.parseInt(elements[i].substring(1)) - 1};
-				} else {
+				positions[i] = pos(elements[i]);
+				if (positions[i][0] < 0 || positions[i][0] > gameController.getBoard().getSquares().length) {
 					throw new ParserException(input);
 				}
 			}
 		}
 		
-		gameController.move(positions[0], positions[1]);
-		gameController.getBoard().draw();
+		boolean correct = gameController.move(positions[0], positions[1]);
+		if (!correct) {
+			console.println("You can't move " + input);
+		}
 	}
 	
 	private class ParserException extends IllegalArgumentException {

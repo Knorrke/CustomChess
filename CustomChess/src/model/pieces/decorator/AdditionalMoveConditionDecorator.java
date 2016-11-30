@@ -10,7 +10,7 @@ public abstract class AdditionalMoveConditionDecorator extends AbstractDecorator
 
 	@Override
 	public final boolean moveCorrect(int[] newPos) {
-		return super.moveCorrect(newPos) && wrappedPiece.moveCorrect(newPos);
+		return wrappedPiece.moveCorrect(newPos) && super.moveCorrect(newPos);
 	}
 	
 	@Override

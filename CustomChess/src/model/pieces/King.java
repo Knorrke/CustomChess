@@ -13,7 +13,7 @@ public class King extends Piece {
 
 	@Override
 	public void initializeMoveLogic(){
-		setMoveLogic(new MoveLogic(getBoard(), this, "1,1|1,0|0,1|2,0;R"));
+		setMoveLogic(new MoveLogic(getBoard(), this, "1,1|1,0|0,1|2,0;R;R"));
 	}
 	
 	@Override

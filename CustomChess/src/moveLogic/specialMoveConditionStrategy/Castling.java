@@ -12,9 +12,11 @@ public class Castling implements SpecialMoveCondition {
 	@Override
 	public boolean isMatchingSpecialCondition(Board board, Piece piece, int[] newPos) {
 		int[] oldPos = piece.getPosition();
+		Piece rook = findRook(board, oldPos, newPos);
 		return (oldPos[Y] == newPos[Y])
+				  && rook != null
 				  && !piece.isMoved()
-				  && !findRook(board, oldPos, newPos).isMoved()
+				  && !rook.isMoved()
 				  && !pieceBetween(board, oldPos, newPos)
 				  && !squareAttacked(board, piece, oldPos, newPos);
 	}

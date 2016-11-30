@@ -3,23 +3,29 @@ package gameController;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import gameController.gameConditionsStrategy.GameCondition;
+import gameController.gameConditionsStrategy.EndConditions.GameEndCondition;
+import gameController.gameConditionsStrategy.IntegrityConditions.GameIntegrityCondition;
 import model.Board;
 import model.pieces.Piece;
+import moves.Move;
 import player.PlayerColor;
 
 public abstract class GameController {
 
 	private ArrayList<PlayerColor> turnOrder = new ArrayList<>();
-	protected ArrayList<GameCondition> gameIntegrityConditions = new ArrayList<>();
+	protected ArrayList<GameIntegrityCondition> gameIntegrityConditions = new ArrayList<>();
+	protected ArrayList<GameEndCondition> gameEndConditions = new ArrayList<>();
+	private ArrayList<Move> moves = new ArrayList<>();
 
-	private final Board board;
+	private Board board;
+	protected GameState state;
 
 	public GameController(PlayerColor startingPlayer) {
 		turnOrder.add(startingPlayer);
 		turnOrder.add(startingPlayer.getOppositColor());
 
 		board = setUpBoard();
+		state = GameState.RUNNING;
 	}
 	
 	public PlayerColor getCurrentPlayer() {
@@ -43,9 +49,12 @@ public abstract class GameController {
 	 */
 	public boolean move(Piece piece, int[] newPos) {
 		assert piece.getBoard() == board;
-		if (piece.getColor() == getCurrentPlayer() && piece.moveCorrect(newPos) && integrityCheck(piece, newPos)) {
-			board.setPieceToNewPosition(piece, newPos);
+		if (moveAllowed(piece, newPos)) {
+			moves.add(new Move(piece,piece.getPosition(), newPos));
+			board.executeMove(this, piece, newPos);
 			nextPlayer();
+			board.draw();
+			gameEndCheck();
 			return true;
 		} else {
 			return false;
@@ -88,14 +97,80 @@ public abstract class GameController {
 	/**
 	 * Add additional conditions for the game.
 	 */
-	public void addIntegrityConditions(GameCondition... conditions) {
+	public void addIntegrityConditions(GameIntegrityCondition... conditions) {
 		Collections.addAll(gameIntegrityConditions, conditions);
 	}
 
+	/**
+	 * Checks if the game has ended
+	 * @return true if game ended, false otherwise
+	 */
+	public boolean gameEndCheck() {
+		for(GameEndCondition cond : gameEndConditions) {
+			GameState newState = cond.isEndConditionMet(this);
+			switch (newState) {
+			case BLACKWIN:
+			case WHITEWIN:
+			case DRAW:
+				setState(newState);
+				return true;
+			default:
+				break;
+			}
+		}
+		return false;
+	}
+	
+	protected void setState(GameState newState) {
+		state = newState;
+		endHook();
+	}
+
+	protected void endHook() {};
+
+	/**
+	 * Add end conditions for the game
+	 * @param conditions
+	 */
+	public void addEndConditions(GameEndCondition... conditions) {
+		Collections.addAll(gameEndConditions, conditions);
+	}
 	/**
 	 * @return the board
 	 */
 	public Board getBoard() {
 		return board;
+	}
+	
+	/**
+	 * Get a board in the state of the specified move
+	 * 
+	 *  @param n move number
+	 *  @return a new Board instance at the specified number of moves
+	 */
+	public Board getBoardAtMove(int n) {
+		if (n >= moves.size()) {
+			return null;
+		}
+		
+		Board saved = board; 
+		try{
+			board = setUpBoard();
+			for(int i=0;i<=n;i++) {
+				Move move = moves.get(i);
+				move(move.getFrom(),move.getTo());
+			}
+			return board;
+		} finally {
+			board = saved;
+		}
+	}
+	
+	public ArrayList<Move> getMoves() {
+		return moves;
+	}
+
+	public boolean moveAllowed(Piece piece, int[] newPos) {
+		return piece.getColor() == getCurrentPlayer() && piece.moveCorrect(newPos) && integrityCheck(piece, newPos);
 	}
 }
