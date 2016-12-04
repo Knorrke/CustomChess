@@ -49,7 +49,7 @@ public abstract class GameController {
 	 */
 	public boolean move(Piece piece, int[] newPos) {
 		assert piece.getBoard() == board;
-		if (moveAllowed(piece, newPos)) {
+		if (piece.getColor() == getCurrentPlayer() && moveAllowed(piece, newPos)) {
 			moves.add(new Move(piece,piece.getPosition(), newPos));
 			board.executeMove(this, piece, newPos);
 			nextPlayer();
@@ -171,6 +171,6 @@ public abstract class GameController {
 	}
 
 	public boolean moveAllowed(Piece piece, int[] newPos) {
-		return piece.getColor() == getCurrentPlayer() && piece.moveCorrect(newPos) && integrityCheck(piece, newPos);
+		return piece.moveCorrect(newPos) && integrityCheck(piece, newPos);
 	}
 }

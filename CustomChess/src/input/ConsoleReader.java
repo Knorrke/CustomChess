@@ -1,8 +1,9 @@
 package input;
 
-import static helper.Helper.*;
+import static helper.Helper.console;
+import static helper.Helper.pos;
+
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 import gameController.GameController;
@@ -23,11 +24,9 @@ public class ConsoleReader {
 					try {
 						BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 						String str = reader.readLine();
-						handle(str);
-					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (IllegalArgumentException e) {
-						System.err.println(e.getMessage());
+						handle(str.trim().replaceAll("\\s+", " "));
+					} catch (Exception ignore) {
+						console.errorPrint("Stream closed.");
 					}
 				}
 			}

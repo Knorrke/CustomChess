@@ -30,6 +30,7 @@ public class PieceView implements ViewInterface {
 		case "Queen" : name = "Q"; break;
 		case "Pawn" : name = "P"; break;
 		case "Bishop": name = "B"; break;
+		default: name = "?"; break;
 		}
 		console.print(name);
 		console.setAttribute(Attribute.CLEAR);

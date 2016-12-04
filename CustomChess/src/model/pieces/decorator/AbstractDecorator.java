@@ -2,7 +2,9 @@ package model.pieces.decorator;
 
 import java.util.Set;
 
+import model.Board;
 import model.pieces.Piece;
+import player.PlayerColor;
 
 public abstract class AbstractDecorator extends Piece {
 	public Piece wrappedPiece;
@@ -41,5 +43,35 @@ public abstract class AbstractDecorator extends Piece {
 		Set<Class<?>> set = wrappedPiece.getType();
 		set.add(this.getClass());
 		return set;
+	}
+	
+	@Override
+	public void setBoard(Board board) {
+		super.setBoard(board);
+		if (wrappedPiece != null) wrappedPiece.setBoard(board);
+	}
+	
+	@Override
+	public void setColor(PlayerColor color) {
+		super.setColor(color);
+		if (wrappedPiece != null) wrappedPiece.setColor(color);
+	}
+	
+	@Override
+	public void setMoved(boolean moved) {
+		super.setMoved(moved);
+		if (wrappedPiece != null) wrappedPiece.setMoved(moved);
+	}
+	
+	@Override
+	public void setPosition(int posX, int posY) {
+		super.setPosition(posX, posY);
+		if (wrappedPiece != null) wrappedPiece.setPosition(posX, posY);
+	}
+	
+	@Override
+	public void setPosition(int[] pos) {
+		super.setPosition(pos);
+		if (wrappedPiece != null) wrappedPiece.setPosition(pos);
 	}
 }

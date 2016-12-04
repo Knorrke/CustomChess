@@ -61,7 +61,7 @@ public class Board implements Drawable {
 		try {
 			sq.setPiece(PieceFactory.newPiece(this, "Dummy", attackerColor.getOppositColor(), pos));
 			for (int i = 0; i < squares.length; i++) {
-				for (int j = 0; j < squares.length; j++) {
+				for (int j = 0; j < squares[i].length; j++) {
 					if (isPieceOfColorOnSquare(attackerColor, pos(i,j)) && squares[i][j].getPiece().moveCorrect(pos)) {
 						return true;
 					}
