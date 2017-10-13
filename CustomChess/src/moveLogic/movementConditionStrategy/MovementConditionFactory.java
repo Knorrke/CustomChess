@@ -5,16 +5,18 @@ public class MovementConditionFactory {
 	public static MovementCondition getBehaviour(String movementRule) {
 		String[] ruleparts = movementRule.split(",");
 		
-		if(ruleparts.length < 2){
+		if(ruleparts.length > 2){
 			throw new IllegalArgumentException("Wrong dimension in rule");
-		}
-		
+		} else if (ruleparts.length == 2) {
 		if(ruleAllowsAll(ruleparts)){
 			return new AllowAll();
 		}else if(ruleAllowsDiagonal(ruleparts)){
 			return new OnlyDiagonal();			
 		}else{
 			return new OnlyCorrectDistance(ruleparts);
+		}
+		} else {
+			return new OnlyCorrectSquare(movementRule);
 		}
 	}
 	

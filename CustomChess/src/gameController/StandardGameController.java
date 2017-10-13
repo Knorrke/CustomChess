@@ -53,6 +53,9 @@ public class StandardGameController extends GameController {
 	protected void endHook() {
 		console.print("Game Over. ");
 		switch(state) {
+		case WHITEWIN:
+			console.println("White wins!");
+			break;
 		case BLACKWIN:
 			console.println("Black wins!");
 			break;
@@ -61,9 +64,6 @@ public class StandardGameController extends GameController {
 			break;
 		case RUNNING:
 			console.println("Wait... no it is not... my bad!");
-			break;
-		case WHITEWIN:
-			console.println("White wins!");
 			break;
 		default:
 			break;

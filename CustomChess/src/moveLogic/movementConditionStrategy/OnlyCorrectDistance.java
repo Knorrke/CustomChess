@@ -39,6 +39,12 @@ public class OnlyCorrectDistance implements MovementCondition {
 		if(distanceCondition.equals("n")){
 			return true;
 		}
+		if (distanceCondition.equals("+n")) {
+			return newPos-pos >= 0;
+		}
+		if (distanceCondition.equals("-n")) {
+			return pos-newPos >= 0;
+		}
 		
 		if(distanceCondition.startsWith("+")){
 			if(newPos-pos != Integer.parseInt(distanceCondition.substring(1))){
