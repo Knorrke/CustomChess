@@ -2,6 +2,7 @@ package gameController;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import gameController.gameConditionsStrategy.EndConditions.GameEndCondition;
 import gameController.gameConditionsStrategy.IntegrityConditions.GameIntegrityCondition;
@@ -49,16 +50,22 @@ public abstract class GameController {
 	 */
 	public boolean move(Piece piece, int[] newPos) {
 		assert piece.getBoard() == board;
-		if (piece.getColor() == getCurrentPlayer() && moveAllowed(piece, newPos)) {
-			moves.add(new Move(piece,piece.getPosition(), newPos));
-			board.executeMove(this, piece, newPos);
-			nextPlayer();
-			board.draw();
-			gameEndCheck();
-			return true;
-		} else {
-			return false;
-		}
+		
+		if (piece.getColor() != getCurrentPlayer()) return false;
+		
+		List<Move> possibleMoves = piece.getPossibleMoves(newPos);
+		if (possibleMoves.isEmpty()) return false;
+		
+		//TODO: What if more than one possible moves?
+		Move move = possibleMoves.get(0);		
+		if (!integrityCheck(move)) return false;
+		
+		this.moves.add(move);
+		move.execute(board);
+		nextPlayer();
+		board.draw();
+		gameEndCheck();
+		return true;
 	}
 
 	/**
@@ -84,14 +91,11 @@ public abstract class GameController {
 	 * Check additional conditions for the game. This is called when the
 	 * specified piece tries to move.
 	 * 
-	 * @param piece
-	 *            The piece being moved
-	 * @param newPos
-	 *            The new position
+	 * @param move The move to be checked
 	 * @return
 	 */
-	public boolean integrityCheck(Piece piece, int[] newPos) {
-		return gameIntegrityConditions.stream().map(cond -> cond.isGameIntegrityEnsured(board, piece, newPos)).reduce(true, Boolean::logicalAnd);
+	public boolean integrityCheck(Move move) {
+		return gameIntegrityConditions.stream().map(cond -> cond.isGameIntegrityEnsured(board, move)).reduce(true, Boolean::logicalAnd);
 	}
 
 	/**
@@ -161,6 +165,8 @@ public abstract class GameController {
 				move(move.getFrom(),move.getTo());
 			}
 			return board;
+		} catch (Exception e) {
+			throw e;
 		} finally {
 			board = saved;
 		}
@@ -171,6 +177,11 @@ public abstract class GameController {
 	}
 
 	public boolean moveAllowed(Piece piece, int[] newPos) {
-		return piece.moveCorrect(newPos) && integrityCheck(piece, newPos);
+		List<Move> moves = piece.getPossibleMoves(newPos);
+		if (moves.isEmpty()) return false;
+		
+		//TODO: What if more than one possible moves?
+		Move move = moves.get(0);		
+		return integrityCheck(move);
 	}
 }

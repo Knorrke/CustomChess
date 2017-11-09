@@ -1,6 +1,7 @@
 package model.pieces;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import model.Board;
@@ -8,6 +9,7 @@ import model.Drawable;
 import model.pieces.interfaces.MoveLogicInitializerInterface;
 import model.pieces.interfaces.ViewInitializerInterface;
 import moveLogic.MoveLogicInterface;
+import moves.Move;
 import player.PlayerColor;
 import view.ViewInterface;
 
@@ -95,8 +97,8 @@ public abstract class Piece implements MoveLogicInitializerInterface, ViewInitia
 		this.board = board;
 	}
 
-	public boolean moveCorrect(int[] newPos) {
-		return moveLogic.moveCorrect(newPos);
+	public List<Move> getPossibleMoves(int[] newPos) {
+		return moveLogic.getPossibleMoves(newPos);
 	}
 	
 	public void setMoveLogic(MoveLogicInterface moveLogic){
