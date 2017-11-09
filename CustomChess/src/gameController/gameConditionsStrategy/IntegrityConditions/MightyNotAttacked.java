@@ -6,23 +6,21 @@ import model.Board;
 import model.Square;
 import model.pieces.Piece;
 import model.pieces.decorator.Mighty;
+import moves.Move;
 
 public class MightyNotAttacked implements GameIntegrityCondition {
 
 	@Override
-	public boolean isGameIntegrityEnsured(Board board, Piece piece, int[] newPos) {
-		Square sq = board.getSquares()[newPos[0]][newPos[1]];
-		Piece capturedPiece = sq.getPiece();
-		int[] oldPos = piece.getPosition();
-		
+	public boolean isGameIntegrityEnsured(Board board, Move move) {
 		try{
-			board.setPieceToNewPosition(piece, newPos);
+			move.execute(board);
+			
 			ArrayList<Piece> mightyPieces = new ArrayList<>();
 			Square[][] squares = board.getSquares();
 			for(Square[] row : squares) {
 				for(Square square : row) {
 					if(square.hasPiece() &&
-						square.getPiece().getColor().equals(piece.getColor()) &&
+						square.getPiece().getColor().equals(move.getPiece().getColor()) &&
 						square.getPiece().getType().contains(Mighty.class)) {
 						mightyPieces.add(square.getPiece());
 					}
@@ -35,9 +33,10 @@ public class MightyNotAttacked implements GameIntegrityCondition {
 				}
 			}
 			return true;
+		} catch (Exception e) {
+			throw e;
 		} finally {
-			board.setPieceToNewPosition(piece, oldPos);
-			sq.setPiece(capturedPiece);
+			move.reverse(board);
 		}
 	}
 }

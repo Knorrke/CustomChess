@@ -1,7 +1,12 @@
 package moveLogic;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import model.Board;
 import model.pieces.Piece;
+import moves.Move;
 
 public class MoveLogic implements MoveLogicInterface {
 	private final Board board;
@@ -16,15 +21,20 @@ public class MoveLogic implements MoveLogicInterface {
 
 	/**
 	 * Checks if the piece of this controller can move to the specified position
+	 * and returns a List of possible Moves (for different sideeffects)
 	 * 
 	 * @param newPos
 	 *            Array containing x and y position, where piece should move to
-	 * @return true if move is according to the rule, false otherwise
+	 * @return List of possible Moves, empty if move not according to the rule
 	 */
-	public boolean moveCorrect(int[] newPos) {
+	public List<Move> getPossibleMoves(int[] newPos) {
 		if (board.isPieceOfColorOnSquare(piece.getColor(), newPos)) {
-			return false;
+			return Collections.emptyList();
 		}
-		return !rule.getMatchingSingleRules(newPos).isEmpty();
+		List<SingleRule> matchingSingleRules = rule.getMatchingSingleRules(newPos);
+		List<Move> moves = matchingSingleRules.parallelStream()
+				.map(singleRule -> singleRule.createMove(newPos))
+				.collect(Collectors.toList());
+		return moves;
 	}
 }

@@ -28,8 +28,10 @@ public class Square implements Drawable{
 	}
 
 	public boolean hasPiece() {
+//		return this.piece != null && !this.piece.getType().contains(Dummy.class);
 		return this.piece != null;
 	}
+	
 	@Override
 	public void draw() {
 		view.draw();

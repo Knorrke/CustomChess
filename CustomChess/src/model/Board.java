@@ -1,17 +1,12 @@
 package model;
 
-import static helper.Helper.X;
-import static helper.Helper.Y;
-import static helper.Helper.pos;
+import static helper.Helper.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import gameController.GameController;
 import model.pieces.Piece;
-import moveLogic.additionalActions.AdditionalAction;
+import moves.Move;
 import player.PlayerColor;
 import view.BoardView;
 import view.ViewInterface;
@@ -19,7 +14,6 @@ import view.ViewInterface;
 public class Board implements Drawable {
 	private Square[][] squares;
 	private ViewInterface view;
-	private Map<int[], List<AdditionalAction>> actionsThisMove = new HashMap<>();
 	private GameController game;
 
 	public Board(GameController game, int width, int height) {
@@ -62,13 +56,16 @@ public class Board implements Drawable {
 			sq.setPiece(PieceFactory.newPiece(this, "Dummy", attackerColor.getOppositColor(), pos));
 			for (int i = 0; i < squares.length; i++) {
 				for (int j = 0; j < squares[i].length; j++) {
-					if (isPieceOfColorOnSquare(attackerColor, pos(i,j)) && squares[i][j].getPiece().moveCorrect(pos)) {
+					if (isPieceOfColorOnSquare(attackerColor, pos(i,j)) 
+							&& !squares[i][j].getPiece().getPossibleMoves(pos).isEmpty()) {
 						return true;
 					}
 				}
 			}
 
 			return false;
+		} catch (Exception e) {
+			throw e;
 		} finally {
 			sq.setPiece(piece);
 		}
@@ -88,15 +85,8 @@ public class Board implements Drawable {
 		}
 	}
 
-	public void executeMove(GameController gameController, Piece piece, int[] newPos) {
-		setPieceToNewPosition(piece, newPos);
-		piece.setMoved(true);
-		if(actionsThisMove.containsKey(newPos)) {
-			for(AdditionalAction action : actionsThisMove.get(newPos)) {
-				action.execute(gameController, piece, newPos);
-			}
-		}
-		actionsThisMove = new HashMap<>();
+	public void executeMove(Move move) {
+		move.execute(this);
 	}
 	
 	public Piece getPieceOfSquare(int[] pos) {
@@ -147,10 +137,6 @@ public class Board implements Drawable {
 		for(Piece piece : pieces) {
 			addPiece(piece);
 		}
-	}
-
-	public void registerAction(int[] newPos, List<AdditionalAction> additionalActions) {
-		actionsThisMove.put(newPos, additionalActions);
 	}
 	
 	public GameController getGameController() {

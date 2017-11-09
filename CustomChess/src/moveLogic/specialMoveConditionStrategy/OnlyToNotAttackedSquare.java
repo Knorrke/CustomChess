@@ -7,7 +7,10 @@ public class OnlyToNotAttackedSquare implements SpecialMoveCondition {
 
 	@Override
 	public boolean isMatchingSpecialCondition(Board board, Piece piece, int[] newPos) {
-		return !board.isAttacked(piece.getColor().getOppositColor(), newPos);
+		board.removePiece(piece);
+		boolean attacked = board.isAttacked(piece.getColor().getOppositColor(), newPos);
+		board.addPiece(piece);
+		return !attacked;
 	}
 
 }

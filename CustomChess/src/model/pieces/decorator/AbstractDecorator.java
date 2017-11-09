@@ -12,6 +12,7 @@ public abstract class AbstractDecorator extends Piece {
 	public AbstractDecorator(Piece wrappedPiece){
 		super(wrappedPiece.getColor(),wrappedPiece.getBoard(), wrappedPiece.getPosition());
 		this.wrappedPiece = wrappedPiece;
+		initializeMoveLogic();
 	}
 	
 	@Override
@@ -28,6 +29,16 @@ public abstract class AbstractDecorator extends Piece {
 	  */
 	public void initializeView() {
 		setView(()->{});
+	}
+	 
+	 @Override
+	 /**
+	  * Default implementation. Doesn't add any logic.
+	  * Override this to add a customized logic
+	  */
+	public void initializeMoveLogic() {
+		if (wrappedPiece != null) 
+			setMoveLogic(wrappedPiece.getMoveLogic());
 	}
 	 
 	/**

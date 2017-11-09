@@ -1,10 +1,13 @@
 package model.pieces.decorator;
 
+import java.util.List;
+
 import model.pieces.Knight;
 import model.pieces.Piece;
 import moveLogic.MoveLogic;
+import moves.Move;
 
-public class KnightRiding extends AdditionalMoveAllowanceDecorator {
+public class KnightRiding extends AbstractDecorator {
 
 	public KnightRiding(Piece wrappedPiece) {
 		super(wrappedPiece);
@@ -18,11 +21,13 @@ public class KnightRiding extends AdditionalMoveAllowanceDecorator {
 				for(int j=-1; j<=1; j++) {
 					Piece adjacentPiece = getBoard().getPieceOfSquare(new int[] {oldpos[0]+i, oldpos[1]+j});
 					if(adjacentPiece != null && isKnight(adjacentPiece)) {
-						return (new MoveLogic(getBoard(), wrappedPiece, "2,1|1,2")).moveCorrect(pos);
+						List<Move> possibleMoves = wrappedPiece.getPossibleMoves(pos);
+						possibleMoves.addAll((new MoveLogic(getBoard(), wrappedPiece, "2,1|1,2")).getPossibleMoves(pos));
+						return possibleMoves;
 					}
 				}
 			}
-			return false;
+			return wrappedPiece.getPossibleMoves(pos);
 		});
 	}
 	

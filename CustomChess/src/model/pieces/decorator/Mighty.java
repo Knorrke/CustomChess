@@ -1,9 +1,12 @@
 package model.pieces.decorator;
 
-import model.pieces.Piece;
-import moveLogic.MoveLogic;
+import java.util.Collections;
 
-public class Mighty extends AdditionalMoveConditionDecorator {
+import model.pieces.Piece;
+import moveLogic.specialMoveConditionStrategy.OnlyToNotAttackedSquare;
+import moveLogic.specialMoveConditionStrategy.SpecialMoveCondition;
+
+public class Mighty extends AbstractDecorator {
 
 	public Mighty(Piece wrappedPiece) {
 		super(wrappedPiece);
@@ -11,6 +14,13 @@ public class Mighty extends AdditionalMoveConditionDecorator {
 
 	@Override
 	public void initializeMoveLogic() {
-		setMoveLogic(new MoveLogic(getBoard(), this,"n,m;!"));
+		setMoveLogic(pos -> {
+			SpecialMoveCondition mc = new OnlyToNotAttackedSquare();
+			if(mc.isMatchingSpecialCondition(getBoard(), this, pos)) {
+				return wrappedPiece.getPossibleMoves(pos);
+			} else {
+				return Collections.emptyList();
+			}
+		});	
 	}
 }

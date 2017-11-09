@@ -1,5 +1,7 @@
 package model.pieces;
 
+import java.util.Collections;
+
 import model.Board;
 import player.PlayerColor;
 
@@ -11,7 +13,7 @@ public class Dummy extends Piece{
 
 	@Override
 	public void initializeMoveLogic() {
-		setMoveLogic(pos-> false);
+		setMoveLogic(pos-> Collections.emptyList());
 	}
 
 	@Override
