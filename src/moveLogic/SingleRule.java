@@ -28,6 +28,7 @@ public class SingleRule {
 	}
 	
 	public boolean matches(int[] newPos) {
+		Piece piece = board.getPieceOfSquare(this.piece.getPosition());
 		return moveCondition.matchesMovementCondition(board, piece, newPos)
 				&& specialMoveCondition.isMatchingSpecialCondition(board, piece, newPos);
 	}

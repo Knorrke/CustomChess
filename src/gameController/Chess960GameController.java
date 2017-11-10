@@ -26,18 +26,15 @@ public class Chess960GameController extends GameController {
 		Board board = new Board(this,8,8);
 		
 		Random rand = new Random();
-		int tetraeder = rand.nextInt(4), cube = rand.nextInt(6), octahedron = rand.nextInt(8),
-				dodecahedron = rand.nextInt(12), icosahedron = rand.nextInt(20); 
-
 		LinkedList<Integer> freePos = new LinkedList<Integer>(Arrays.asList(0,1,2,3,4,5,6,7));
-		
-		Integer bish1 = freePos.remove(octahedron);
-		Integer bish2 = octahedron%2 == 0 ? tetraeder*2 + 1 : tetraeder*2;
+
+		Integer bish1 = freePos.remove(rand.nextInt(8)); //first bishop randomly on 1 of 8
+		Integer bish2 = bish1%2 == 0 ? rand.nextInt(4)*2 + 1 : rand.nextInt(4)*2; //second bishop randomly on other color
 		freePos.remove(bish2);
-		Integer queen = freePos.remove(cube);
-		Integer knight1 = freePos.remove(icosahedron%5);
-		Integer knight2 = freePos.remove(dodecahedron%4);
-		Integer rook1 = freePos.remove(0);
+		Integer queen = freePos.remove(rand.nextInt(6)); //queen randomly on remaining 6
+		Integer knight1 = freePos.remove(rand.nextInt(5)); //knight randomly on remaining 5
+		Integer knight2 = freePos.remove(rand.nextInt(4)); //knight randomly on remaining 4
+		Integer rook1 = freePos.remove(0); //remaining 3 squares are rook,king,rook
 		Integer king = freePos.remove(0);
 		Integer rook2 = freePos.remove(0);
 		

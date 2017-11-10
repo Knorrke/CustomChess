@@ -38,4 +38,9 @@ public class PromotionAction extends AdditionalAction {
 			board.addPiece(piece);
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("Promotion %s %s->%s",piece.getClass().getSimpleName(),posToString(from), posToString(to));
+	}
 }

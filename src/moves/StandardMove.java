@@ -1,6 +1,8 @@
 package moves;
 
-import static helper.Helper.console;
+import static helper.Helper.*;
+
+import java.util.Arrays;
 
 import model.Board;
 import model.pieces.Piece;
@@ -17,7 +19,9 @@ public class StandardMove extends Move {
 	@Override
 	public Board execute(Board board) {
 		pieceMovedBefore = super.piece.isMoved();
-		captured = board.getPieceOfSquare(super.to);
+		if (!Arrays.equals(to, from)) {
+			captured = board.getPieceOfSquare(super.to);
+		}
 		board.setPieceToNewPosition(super.piece, super.to);
 		piece.setMoved(true);
 		super.execute(board);
@@ -40,4 +44,8 @@ public class StandardMove extends Move {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%s %s->%s",piece.getClass().getSimpleName(), posToString(from), posToString(to));
+	}
 }

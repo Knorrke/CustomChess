@@ -1,5 +1,6 @@
 package gameController;
 
+import static helper.Helper.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +11,7 @@ import model.Board;
 import model.pieces.Piece;
 import moves.Move;
 import player.PlayerColor;
+import view.SelectMoveView;
 
 public abstract class GameController {
 
@@ -28,7 +30,7 @@ public abstract class GameController {
 		board = setUpBoard();
 		state = GameState.RUNNING;
 	}
-	
+
 	public PlayerColor getCurrentPlayer() {
 		return turnOrder.get(0);
 	}
@@ -50,16 +52,18 @@ public abstract class GameController {
 	 */
 	public boolean move(Piece piece, int[] newPos) {
 		assert piece.getBoard() == board;
-		
-		if (piece.getColor() != getCurrentPlayer()) return false;
-		
+
+		if (piece.getColor() != getCurrentPlayer())
+			return false;
+
 		List<Move> possibleMoves = piece.getPossibleMoves(newPos);
-		if (possibleMoves.isEmpty()) return false;
-		
-		//TODO: What if more than one possible moves?
-		Move move = possibleMoves.get(0);		
-		if (!integrityCheck(move)) return false;
-		
+		possibleMoves.removeIf(move -> !integrityCheck(move));
+		if (possibleMoves.isEmpty()) {
+			return false;
+		}
+
+		Move move = possibleMoves.size() == 1 ? possibleMoves.get(0) : (new SelectMoveView()).chooseMove(possibleMoves);
+
 		this.moves.add(move);
 		move.execute(board);
 		nextPlayer();
@@ -78,7 +82,7 @@ public abstract class GameController {
 	 *            Position to move piece to
 	 */
 	public boolean move(int[] from, int[] to) {
-		if(board.isPieceOfColorOnSquare(getCurrentPlayer(), from)) {
+		if (board.isPieceOfColorOnSquare(getCurrentPlayer(), from)) {
 			return move(board.getPieceOfSquare(from), to);
 		} else {
 			return false;
@@ -91,7 +95,8 @@ public abstract class GameController {
 	 * Check additional conditions for the game. This is called when the
 	 * specified piece tries to move.
 	 * 
-	 * @param move The move to be checked
+	 * @param move
+	 *            The move to be checked
 	 * @return
 	 */
 	public boolean integrityCheck(Move move) {
@@ -107,10 +112,11 @@ public abstract class GameController {
 
 	/**
 	 * Checks if the game has ended
+	 * 
 	 * @return true if game ended, false otherwise
 	 */
 	public boolean gameEndCheck() {
-		for(GameEndCondition cond : gameEndConditions) {
+		for (GameEndCondition cond : gameEndConditions) {
 			GameState newState = cond.isEndConditionMet(this);
 			switch (newState) {
 			case BLACKWIN:
@@ -124,45 +130,49 @@ public abstract class GameController {
 		}
 		return false;
 	}
-	
+
 	protected void setState(GameState newState) {
 		state = newState;
 		endHook();
 	}
 
-	protected void endHook() {};
+	protected void endHook() {
+	};
 
 	/**
 	 * Add end conditions for the game
+	 * 
 	 * @param conditions
 	 */
 	public void addEndConditions(GameEndCondition... conditions) {
 		Collections.addAll(gameEndConditions, conditions);
 	}
+
 	/**
 	 * @return the board
 	 */
 	public Board getBoard() {
 		return board;
 	}
-	
+
 	/**
 	 * Get a board in the state of the specified move
 	 * 
-	 *  @param n move number
-	 *  @return a new Board instance at the specified number of moves
+	 * @param n
+	 *            move number
+	 * @return a new Board instance at the specified number of moves
 	 */
 	public Board getBoardAtMove(int n) {
 		if (n >= moves.size()) {
 			return null;
 		}
-		
-		Board saved = board; 
-		try{
+
+		Board saved = board;
+		try {
 			board = setUpBoard();
-			for(int i=0;i<=n;i++) {
+			for (int i = 0; i <= n; i++) {
 				Move move = moves.get(i);
-				move(move.getFrom(),move.getTo());
+				move(move.getFrom(), move.getTo());
 			}
 			return board;
 		} catch (Exception e) {
@@ -171,17 +181,33 @@ public abstract class GameController {
 			board = saved;
 		}
 	}
-	
+
 	public ArrayList<Move> getMoves() {
 		return moves;
 	}
 
 	public boolean moveAllowed(Piece piece, int[] newPos) {
 		List<Move> moves = piece.getPossibleMoves(newPos);
-		if (moves.isEmpty()) return false;
-		
-		//TODO: What if more than one possible moves?
-		Move move = moves.get(0);		
+		if (moves.isEmpty())
+			return false;
+
+		// TODO: What if more than one possible moves?
+		Move move = moves.get(0);
 		return integrityCheck(move);
+	}
+
+	public List<Move> getAllowedMoves() {
+		List<Move> moves = new ArrayList<>();
+		board.getAllPieces().stream()
+			.filter(piece -> piece.getColor() == getCurrentPlayer())
+			.forEach(piece -> {
+				for (int i=0; i<board.size(X); i++) {
+					for (int j=0; j<board.size(Y); j++) {
+						moves.addAll(piece.getPossibleMoves(pos(i,j)));
+					}
+				}
+			});
+		moves.removeIf(move -> !integrityCheck(move));
+		return moves;
 	}
 }

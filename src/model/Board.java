@@ -3,6 +3,7 @@ package model;
 import static helper.Helper.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import gameController.GameController;
 import model.pieces.Piece;
@@ -80,7 +81,7 @@ public class Board implements Drawable {
 		
 		piece.setPosition(newPos);
 		squares[newPos[X]][newPos[Y]].setPiece(piece);
-		if (!oldPosition.equals(newPos)) {
+		if (!Arrays.equals(oldPosition,newPos)) {
 			oldSquareOfPiece.setPiece(null);
 		}
 	}

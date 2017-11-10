@@ -16,17 +16,18 @@ public class Castling implements SpecialMoveCondition {
 	public boolean isMatchingSpecialCondition(Board board, Piece piece, int[] newPos) {
 		int[] oldPos = piece.getPosition();
 		Piece rook = findRook(board, oldPos, newPos);
-		return (oldPos[Y] == newPos[Y]) 
+		return (oldPos[Y] == newPos[Y]
 				&& rook != null 
 				&& !piece.isMoved() 
 				&& !rook.isMoved() 
 				&& !otherPiecesBetween(board, oldPos, newPos, rook, piece)
-				&& !otherPiecesBetween(board, rook.getPosition(), (newPos[X] == 2 ? pos(3, newPos[Y]) : pos(5, newPos[Y])), rook, piece)
-				&& !squareAttacked(board, piece, oldPos, newPos);
+				&& !otherPiecesBetween(board, rook.getPosition(), (isShortCastling(newPos) ? pos(3, newPos[Y]) : pos(5, newPos[Y])), rook, piece)
+				&& !squareAttacked(board, piece, oldPos, newPos)
+				);
 	}
 
-	private Piece findRook(Board board, int[] oldPos, int[] newPos) {
-		int dir = Integer.signum(newPos[X] - oldPos[X]);
+	public Piece findRook(Board board, int[] oldPos, int[] newPos) {
+		int dir = isShortCastling(newPos) ? -1 : 1; 
 		for (int i = 0; oldPos[X]+i*dir >= 0 && oldPos[X]+i*dir<board.size(X); i++) {
 			if (board.isPieceOnSquare(pos(oldPos[X]+i*dir, oldPos[Y]))) {
 				Piece piece = board.getPieceOfSquare(pos(oldPos[X]+i*dir, oldPos[Y]));
@@ -38,8 +39,12 @@ public class Castling implements SpecialMoveCondition {
 		throw new IllegalArgumentException("No rook found for castling");
 	}
 
+	private boolean isShortCastling(int[] newPos) {
+		return newPos[X] == 2;
+	}
+
 	private boolean squareAttacked(Board board, Piece piece, int[] oldPos, int[] newPos) {
-		int dir = (int) Math.signum(newPos[X] - oldPos[X]);
+		int dir = isShortCastling(newPos) ? -1 : 1; 
 		for (int i = 0; i <= Math.abs(oldPos[X] - newPos[X]); i++) {
 			if (board.isAttacked(piece.getColor().getOppositColor(), pos(oldPos[X] + i * dir, oldPos[Y])))
 				return true;
@@ -58,7 +63,7 @@ public class Castling implements SpecialMoveCondition {
 	 * @return
 	 */
 	private boolean otherPiecesBetween(Board board, int[] pos1, int[] pos2, Piece... pieces) {
-		int dir = Integer.signum(pos2[X] - pos1[X]);
+		int dir = Integer.signum(pos2[X] - pos1[X]); 
 		
 		for (int i = 0; i <= Math.abs(pos2[X]-pos1[X]); i++) {
 			if (board.isPieceOnSquare(pos(pos1[X]+i*dir, pos1[Y]))) {

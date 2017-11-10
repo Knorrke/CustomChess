@@ -1,12 +1,13 @@
 package input;
 
-import static helper.Helper.console;
-import static helper.Helper.pos;
+import static helper.Helper.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import gameController.GameController;
+import moves.Move;
 
 public class ConsoleReader {
 	
@@ -35,6 +36,15 @@ public class ConsoleReader {
 	}
 
 	public void handle(String input) throws IllegalArgumentException {
+		if (input.equalsIgnoreCase("list")) {
+			List<Move> moves = gameController.getAllowedMoves();
+			for (Move move : moves) {
+				console.print(move.toString() + ", ");
+			}
+			console.println("resign");
+			return;
+		}
+		
 		if (!input.contains(" ")) {
 			throw new ParserException(input);
 		}

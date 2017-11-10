@@ -1,12 +1,11 @@
 package moveLogicTests;
 
+import static helper.Helper.pos;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static helper.Helper.*;
 
 import gameController.GameController;
 import gameController.StandardGameController;
@@ -220,6 +219,22 @@ public class SpecialConditionsTest {
 		rook2.setMoved(false);
 		king.setMoved(true);
 		assertFalse("Can't castle if king has already moved", condition.isMatchingSpecialCondition(board, king, pos("g1")));
+	}
+	
+	@Test
+	public void castling960Test() {
+		Castling castlingCondition = new Castling();
+		Board board = new Board(8,8);
+		Piece king = PieceFactory.newPiece(board, "Mighty King", ownColor, pos("c1"));
+		Piece rook = PieceFactory.newPiece(board, "Rook", ownColor,pos("b1"));
+		Piece rook2 = PieceFactory.newPiece(board, "Rook", ownColor,pos("f1"));
+		board.addPieces(king, rook, rook2);
+		
+		assertEquals("Should find the correct rook when castling short", rook, castlingCondition.findRook(board, king.getPosition(), pos("c1")));
+		assertTrue("Castling without moving King should work", castlingCondition.isMatchingSpecialCondition(board, king, pos("c1")));
+		assertEquals("Should find the correct rook when castling long", rook2, castlingCondition.findRook(board, king.getPosition(), pos("g1")));
+		assertTrue("Castling without moving Rook should work", castlingCondition.isMatchingSpecialCondition(board, king, pos("g1")));
+		
 	}
 	
 	@Test

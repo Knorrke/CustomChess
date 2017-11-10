@@ -17,7 +17,7 @@ public class Rule {
 	}
 
 	public List<SingleRule> getMatchingSingleRules(int[] newPos) {
-		return singleRules.parallelStream()
+		return singleRules.stream()
 				.filter(rule -> rule.matches(newPos))
 				.collect(Collectors.toList());
 	}

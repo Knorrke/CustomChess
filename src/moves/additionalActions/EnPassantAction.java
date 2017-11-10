@@ -41,4 +41,9 @@ public class EnPassantAction extends AdditionalAction {
 		}
 	}
 
+
+	@Override
+	public String toString() {
+		return String.format("En Passant %s %s->%s",piece.getClass().getSimpleName(),posToString(from), posToString(to));
+	}
 }

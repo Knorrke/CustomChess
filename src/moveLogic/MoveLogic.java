@@ -1,5 +1,6 @@
 package moveLogic;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,11 +29,11 @@ public class MoveLogic implements MoveLogicInterface {
 	 * @return List of possible Moves, empty if move not according to the rule
 	 */
 	public List<Move> getPossibleMoves(int[] newPos) {
-		if (board.isPieceOfColorOnSquare(piece.getColor(), newPos)) {
+		if (!Arrays.equals(newPos, piece.getPosition()) && board.isPieceOfColorOnSquare(piece.getColor(), newPos)) {
 			return Collections.emptyList();
 		}
 		List<SingleRule> matchingSingleRules = rule.getMatchingSingleRules(newPos);
-		List<Move> moves = matchingSingleRules.parallelStream()
+		List<Move> moves = matchingSingleRules.stream()
 				.map(singleRule -> singleRule.createMove(newPos))
 				.collect(Collectors.toList());
 		return moves;
