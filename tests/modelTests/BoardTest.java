@@ -4,11 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import base.NoConsoleTest;
 import model.Board;
 import model.Square;
 import model.SquareColor;
 
-public class BoardTest {
+public class BoardTest extends NoConsoleTest {
 
 	@Test
 	public void setupTest() {

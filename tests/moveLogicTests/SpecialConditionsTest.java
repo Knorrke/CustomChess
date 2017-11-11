@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import base.NoConsoleTest;
 import gameController.GameController;
 import gameController.StandardGameController;
 import model.Board;
@@ -26,7 +27,7 @@ import moveLogic.specialMoveConditionStrategy.OnlyToNotAttackedSquare;
 import moveLogic.specialMoveConditionStrategy.SpecialMoveCondition;
 import player.PlayerColor;
 
-public class SpecialConditionsTest {
+public class SpecialConditionsTest extends NoConsoleTest {
 	Board boardmock;
 	Piece piecemock;
 	SpecialMoveCondition condition;

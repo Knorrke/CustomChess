@@ -5,7 +5,9 @@ import static helper.Helper.*;
 
 import org.junit.Test;
 
-public class HelperTest {
+import base.NoConsoleTest;
+
+public class HelperTest extends NoConsoleTest {
 
 	@Test
 	public void positionTests() {

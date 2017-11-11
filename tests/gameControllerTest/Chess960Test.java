@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import base.NoConsoleTest;
 import gameController.Chess960GameController;
 import model.Board;
 import model.PieceFactory;
@@ -13,7 +14,7 @@ import model.pieces.Piece;
 import model.pieces.Rook;
 import player.PlayerColor;
 
-public class Chess960Test {
+public class Chess960Test extends NoConsoleTest {
 
 	private String[] testPieces;
 	

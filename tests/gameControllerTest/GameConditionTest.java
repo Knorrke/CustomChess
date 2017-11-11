@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import base.NoConsoleTest;
 import gameController.gameConditionsStrategy.IntegrityConditions.GameIntegrityCondition;
 import gameController.gameConditionsStrategy.IntegrityConditions.MightyNotAttacked;
 import model.Board;
@@ -12,7 +13,7 @@ import model.PieceFactory;
 import model.pieces.Piece;
 import player.PlayerColor;
 
-public class GameConditionTest {
+public class GameConditionTest extends NoConsoleTest {
 
 	GameIntegrityCondition cond;
 	Board board;

@@ -28,7 +28,7 @@ public class Helper {
 		return "" + col + (pos[Y]+1);
 	}
 	
-	public static final ColoredPrinter console = new ColoredPrinter.Builder(1, false)
-            .foreground(FColor.WHITE).background(BColor.BLUE)
+	public static ColoredPrinter console = new ColoredPrinter.Builder(1, false)
+            .foreground(FColor.WHITE).background(BColor.BLUE).level(3)
             .build();
 }

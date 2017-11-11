@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import base.NoConsoleTest;
 import model.Board;
 import model.PieceFactory;
 import model.pieces.Bishop;
@@ -13,16 +14,15 @@ import model.pieces.Pawn;
 import model.pieces.Piece;
 import player.PlayerColor;
 
-public class PieceFactoryTest {
-/*
+public class PieceFactoryTest extends NoConsoleTest {
+
 	@Test
 	public void acceptCustomClassesTest(){
-		
 		Piece piece = PieceFactory.newPiece(new Board(8,8),TestPieceDummy.class.getName(),PlayerColor.BLACK,new int[] {0,0});
 		assertNotNull("Should not be null", piece);
 		assertTrue("Should be a subclass of Piece", piece instanceof Piece);
 		assertFalse("Shouldn't be a pawn", piece instanceof Pawn);
-	}*/
+	}
 	
 	@Test
 	public void corectClassTest() {

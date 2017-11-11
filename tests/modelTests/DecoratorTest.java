@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 
+import base.NoConsoleTest;
 import model.Board;
 import model.PieceFactory;
 import model.pieces.Dummy;
@@ -18,7 +19,7 @@ import model.pieces.decorator.KnightRiding;
 import model.pieces.decorator.Mighty;
 import player.PlayerColor;
 
-public class DecoratorTest {
+public class DecoratorTest extends NoConsoleTest {
 
 	private PlayerColor playerColor, opponentColor;
 	private Board boardmock;

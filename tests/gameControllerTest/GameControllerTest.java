@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import base.NoConsoleTest;
+
 import static helper.Helper.*;
 
 import gameController.GameController;
@@ -13,7 +15,7 @@ import model.pieces.Pawn;
 import model.pieces.Piece;
 import player.PlayerColor;
 
-public class GameControllerTest {
+public class GameControllerTest extends NoConsoleTest {
 
 	@Test
 	public void standardGameTest() {

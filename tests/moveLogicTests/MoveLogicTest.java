@@ -5,13 +5,15 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import base.NoConsoleTest;
+
 import static helper.Helper.*;
 
 import model.Board;
 import model.pieces.Piece;
 import moveLogic.MoveLogic;
 
-public class MoveLogicTest {
+public class MoveLogicTest extends NoConsoleTest {
 
 	@Test
 	public void movementConditionTest() {
