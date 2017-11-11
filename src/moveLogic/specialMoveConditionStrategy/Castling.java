@@ -15,15 +15,16 @@ public class Castling implements SpecialMoveCondition {
 	@Override
 	public boolean isMatchingSpecialCondition(Board board, Piece piece, int[] newPos) {
 		int[] oldPos = piece.getPosition();
+		if (oldPos[Y] != newPos[Y]) return false;
+		
 		Piece rook = findRook(board, oldPos, newPos);
-		return (oldPos[Y] == newPos[Y]
-				&& rook != null 
-				&& !piece.isMoved() 
-				&& !rook.isMoved() 
-				&& !otherPiecesBetween(board, oldPos, newPos, rook, piece)
-				&& !otherPiecesBetween(board, rook.getPosition(), (isShortCastling(newPos) ? pos(3, newPos[Y]) : pos(5, newPos[Y])), rook, piece)
-				&& !squareAttacked(board, piece, oldPos, newPos)
-				);
+		return (rook != null 
+			&& !piece.isMoved() 
+			&& !rook.isMoved() 
+			&& !otherPiecesBetween(board, oldPos, newPos, rook, piece)
+			&& !otherPiecesBetween(board, rook.getPosition(), (isShortCastling(newPos) ? pos(3, newPos[Y]) : pos(5, newPos[Y])), rook, piece)
+			&& !squareAttacked(board, piece, oldPos, newPos)
+			);
 	}
 
 	public Piece findRook(Board board, int[] oldPos, int[] newPos) {
@@ -36,7 +37,8 @@ public class Castling implements SpecialMoveCondition {
 				}
 			}
 		}
-		throw new IllegalArgumentException("No rook found for castling");
+		return null;
+//		throw new IllegalArgumentException("No rook found for castling");
 	}
 
 	private boolean isShortCastling(int[] newPos) {

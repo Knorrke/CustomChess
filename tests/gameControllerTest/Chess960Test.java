@@ -18,7 +18,7 @@ public class Chess960Test {
 	private String[] testPieces;
 	
 	@Test
-	public void chess960Test() {
+	public void castlingWithPiecesOnCorrectSquares() {
 		testPieces = new String[] {"Knight", "Rook", "Mighty King", "Queen", "Bishop", "Rook", "Knight", "Bishop"};
 		Chess960GameController gc = new Chess960TestController();
 		
@@ -41,9 +41,31 @@ public class Chess960Test {
 		
 		assertTrue("Should be able to castle short with rook already on f1", gc.moveAllowed(king, pos("g1")));
 		assertTrue(gc.move(pos("c1"), pos("g1")));
-		assertEquals("Rook shoud be on f1", rook, gc.getBoard().getPieceOfSquare(pos("f1")));
-		assertEquals("King shoud be on g1", king, gc.getBoard().getPieceOfSquare(pos("g1")));
+		assertEquals("Rook should be on f1", rook, gc.getBoard().getPieceOfSquare(pos("f1")));
+		assertEquals("King should be on g1", king, gc.getBoard().getPieceOfSquare(pos("g1")));
 		assertNull("c1 should be empty", gc.getBoard().getPieceOfSquare(pos("c1")));
+		assertTrue("Rook should be marked as moved", rook.isMoved());
+		assertTrue("King should be marked as moved", king.isMoved());
+	}
+	
+	@Test
+	public void castlingWithSwappingRookAndKing() {
+		testPieces = new String[] {"Knight", "Queen", "Rook", "Mighty King", "Bishop", "Rook", "Knight", "Bishop"};
+		Chess960GameController gc = new Chess960TestController();
+		gc.getBoard().draw();
+		
+		Piece rook = gc.getBoard().getPieceOfSquare(pos("c1"));
+		assertTrue(rook.getType().contains(Rook.class));
+		Piece king = gc.getBoard().getPieceOfSquare(pos("d1"));
+		assertTrue(king.getType().contains(King.class));
+		
+		assertTrue("Should be able to castle with rook on c1", gc.moveAllowed(king, pos("c1")));
+		
+		assertTrue(gc.move(pos("d1"), pos("c1")));
+		assertEquals("Rook should be on d1", rook, gc.getBoard().getPieceOfSquare(pos("d1")));
+		assertEquals("King should be on c1", king, gc.getBoard().getPieceOfSquare(pos("c1")));
+		assertTrue("Rook should be marked as moved", rook.isMoved());
+		assertTrue("King should be marked as moved", king.isMoved());
 	}
 	
 	private class Chess960TestController extends Chess960GameController {

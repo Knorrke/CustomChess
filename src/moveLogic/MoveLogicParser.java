@@ -4,6 +4,7 @@ import model.Board;
 import model.pieces.Piece;
 import moveLogic.movementConditionStrategy.MovementCondition;
 import moveLogic.movementConditionStrategy.MovementConditionFactory;
+import moveLogic.specialMoveConditionStrategy.NoOwnPieceOnSquare;
 import moveLogic.specialMoveConditionStrategy.SpecialMoveCondition;
 import moveLogic.specialMoveConditionStrategy.SpecialMoveConditionFactory;
 
@@ -17,7 +18,7 @@ public class MoveLogicParser {
 			MovementCondition mc = MovementConditionFactory.getBehaviour(ruleParts[0]);
 			SpecialMoveCondition smc = ruleParts.length > 1
 					? SpecialMoveConditionFactory.getBehaviour(ruleParts[1])
-					: (b,p,n)->true;
+					: new NoOwnPieceOnSquare();
 			String actions = ruleParts.length > 2 ? ruleParts[2] : "";
 			rule.add(new SingleRule(board, piece, mc, smc, actions));
 		}

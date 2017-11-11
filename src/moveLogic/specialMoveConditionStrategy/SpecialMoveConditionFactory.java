@@ -56,6 +56,10 @@ public class SpecialMoveConditionFactory {
 			int nextSpecialChar = max(condition.indexOf("(", progress), condition.indexOf("+", progress), condition.indexOf(")", progress));
 
 			List<SpecialMoveCondition> list = new ArrayList<>();
+			if(condition.charAt(0) != 'Y') {
+				list.add(new NoOwnPieceOnSquare());
+			}
+			
 			if (nextSpecialChar == -1) {
 				for (char c : condition.substring(progress).toCharArray()) {
 					SpecialMoveCondition next = getBehaviour(c);

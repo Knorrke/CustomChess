@@ -19,23 +19,45 @@ public class CastleAction extends AdditionalAction {
 	}
 	
 	@Override
-	protected void afterDecoratedExecute(Board board) {
-		if(!piece.getType().contains(King.class)){
+	protected void beforeDecoratedExecute(Board board) {
+		if (!piece.getType().contains(King.class)) {
 			return;
 		}
 		Castling logik = new Castling();
 		rook = logik.findRook(board, from, to);
+		if (rook == null) {
+			return;
+		}
 		rookOldPosition = rook.getPosition();
-		board.setPieceToNewPosition(rook, pos(to[X] == 2 ? 3 : 5, to[Y]));
+		board.removePiece(rook);
+	}
+
+	@Override
+	protected void afterDecoratedReverse(Board board) {
+		if (executed) {			
+			rook.setMoved(false);
+			rook.setPosition(rookOldPosition);
+			board.addPiece(rook);
+		}
+	}
+	
+	
+	@Override
+	protected void afterDecoratedExecute(Board board) {
+		if (rook == null) {
+			return;
+		}
+		rook.setPosition(pos(to[X] == 2 ? 3 : 5, to[Y]));
+		rook.setMoved(true);
+		board.addPiece(rook);
 		executed = true;		
 	}
 	@Override
 	protected void beforeDecoratedReverse(Board board) {
 		if (executed) {
-			board.setPieceToNewPosition(rook, rookOldPosition);
+			board.removePiece(rook);
 		}
 	}
-	
 
 	@Override
 	public String toString() {
