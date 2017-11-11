@@ -14,16 +14,18 @@ public class SelectMoveView {
 		Move chosenMove = null;
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-			boolean choose = true;
+			boolean chooseAgain = true;
+			int index = 0;
 			for (Move move : moves) {
-				console.print(move.toString());
+				console.print(String.format("%d: %s, ", index++, move));
 			}
-			while(choose) {
+			while(chooseAgain) {
 				console.println("Which move do you want to select");
 				try {
-					int index = Integer.parseInt(reader.readLine()); 
-					if (index < moves.size() ) {						
-						chosenMove = moves.get(index);
+					int chosenIndex = Integer.parseInt(reader.readLine()); 
+					if (chosenIndex < moves.size() ) {						
+						chosenMove = moves.get(chosenIndex);
+						chooseAgain = false;
 					}
 				}catch (NumberFormatException e) {
 					e.printStackTrace();

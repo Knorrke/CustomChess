@@ -36,31 +36,30 @@ public class OnlyCorrectDistance implements MovementCondition {
 	 * @return
 	 */
 	private boolean correctDistance(String distanceCondition, int newPos, int pos) {
-		if(distanceCondition.equals("n")){
+		switch(distanceCondition) {
+		case "n0":  return true;
+		case "n" :  return newPos-pos != 0;
+		case "+n0": return newPos-pos >= 0;
+		case "+n" : return newPos-pos > 0;
+		case "-n0": return newPos-pos <= 0;
+		case "-n":  return newPos-pos > 0;
+		default: 
+			if(distanceCondition.startsWith("+")){
+				if(newPos-pos != Integer.parseInt(distanceCondition.substring(1))){
+					return false;
+				}
+			}else if(distanceCondition.startsWith("-")){
+				if(pos-newPos != Integer.parseInt(distanceCondition.substring(1))){
+					return false;
+				}
+			}else{
+				if(Math.abs(newPos-pos) != Integer.parseInt(distanceCondition)){
+					return false;
+				}
+			}
+		
 			return true;
 		}
-		if (distanceCondition.equals("+n")) {
-			return newPos-pos >= 0;
-		}
-		if (distanceCondition.equals("-n")) {
-			return pos-newPos >= 0;
-		}
-		
-		if(distanceCondition.startsWith("+")){
-			if(newPos-pos != Integer.parseInt(distanceCondition.substring(1))){
-				return false;
-			}
-		}else if(distanceCondition.startsWith("-")){
-			if(pos-newPos != Integer.parseInt(distanceCondition.substring(1))){
-				return false;
-			}
-		}else{
-			if(Math.abs(newPos-pos) != Integer.parseInt(distanceCondition)){
-				return false;
-			}
-		}
-		
-		return true;
 	}
 	
 	/**

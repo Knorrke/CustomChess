@@ -11,7 +11,7 @@ public class MovementConditionFactory {
 			if (ruleAllowsAll(ruleparts)) {
 				return new AllowAll();
 			} else if (ruleAllowsDiagonal(ruleparts)) {
-				return new OnlyDiagonal();
+				return new OnlyDiagonal(ruleparts);
 			} else {
 				return new OnlyCorrectDistance(ruleparts);
 			}
@@ -37,6 +37,7 @@ public class MovementConditionFactory {
 	 * @return
 	 */
 	private static boolean ruleAllowsDiagonal(String[] ruleparts) {
-		return ruleparts[0].equals("n") && ruleparts[1].equals("n");
+		return ruleparts[0].equals("n") && ruleparts[1].equals("n")
+				|| ruleparts[0].equals("n0") && ruleparts[1].equals("n0");
 	}
 }
