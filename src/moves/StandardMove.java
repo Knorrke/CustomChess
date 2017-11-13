@@ -48,4 +48,9 @@ public class StandardMove extends Move {
 	public String toString() {
 		return String.format("%s %s->%s",piece.getClass().getSimpleName(), posToString(from), posToString(to));
 	}
+
+	@Override
+	public Move duplicate(Board board) {
+		return new StandardMove(board.getPieceOfSquare(from), to);
+	}
 }

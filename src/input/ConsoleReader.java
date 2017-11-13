@@ -35,16 +35,19 @@ public class ConsoleReader {
 		receiver.start();
 	}
 
-	public void handle(String input) throws IllegalArgumentException {
-		if (input.equalsIgnoreCase("list")) {
-			List<Move> moves = gameController.getAllowedMoves();
-			for (Move move : moves) {
-				console.print(move.toString() + ", ");
-			}
-			console.println("resign");
-			return;
+	public void handle(String input) {
+		switch(input.toLowerCase()) {
+		case "list": handleList(); return;
+		case "revert": handleRevert(); return;
+		default: handleMove(input); return;
 		}
-		
+	}
+	
+	private void handleRevert() {
+		gameController.revertLastMove();
+	}
+
+	public void handleMove(String input) {
 		if (!input.contains(" ")) {
 			throw new ParserException(input);
 		}
@@ -69,6 +72,14 @@ public class ConsoleReader {
 		}
 	}
 	
+	private void handleList() {
+		List<Move> moves = gameController.getAllowedMoves();
+		for (Move move : moves) {
+			console.print(move.toString() + ", ");
+		}
+		console.println("resign");
+	}
+
 	private class ParserException extends IllegalArgumentException {
 		private static final long serialVersionUID = 1L;
 

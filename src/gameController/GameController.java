@@ -62,7 +62,7 @@ public abstract class GameController {
 			return false;
 		}
 
-		Move move = possibleMoves.size() == 1 ? possibleMoves.get(0) : (new SelectMoveView()).chooseMove(possibleMoves);
+		Move move = possibleMoves.size() == 1 ? possibleMoves.get(0) : new SelectMoveView().chooseMove(possibleMoves);
 
 		this.moves.add(move);
 		move.execute(board);
@@ -171,8 +171,9 @@ public abstract class GameController {
 		try {
 			board = setUpBoard();
 			for (int i = 0; i <= n; i++) {
-				Move move = moves.get(i);
-				move(move.getFrom(), move.getTo());
+				Move move = moves.get(i).duplicate(board);
+				move.execute(board);
+				//TODO: rewrite this with making move....
 			}
 			return board;
 		} catch (Exception e) {
@@ -184,6 +185,13 @@ public abstract class GameController {
 
 	public ArrayList<Move> getMoves() {
 		return moves;
+	}
+	
+	public void revertLastMove() {
+		Move lastMove = moves.remove(moves.size()-1);
+		lastMove.reverse(board);
+		turnOrder.add(0, turnOrder.remove(turnOrder.size()-1));
+		board.draw();
 	}
 
 	public boolean moveAllowed(Piece piece, int[] newPos) {

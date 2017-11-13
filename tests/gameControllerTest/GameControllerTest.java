@@ -1,16 +1,15 @@
 package gameControllerTest;
 
 
+import static helper.Helper.pos;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
 import base.NoConsoleTest;
-
-import static helper.Helper.*;
-
 import gameController.GameController;
 import gameController.StandardGameController;
+import model.Board;
 import model.pieces.Pawn;
 import model.pieces.Piece;
 import player.PlayerColor;
@@ -46,13 +45,59 @@ public class GameControllerTest extends NoConsoleTest {
 	public void moveResetTest() {
 		GameController gameController = new StandardGameController();
 		gameController.move(pos("e2"),pos("e4"));
+		moveResetTestCheckFirstMove(gameController.getBoard());
 		gameController.move(pos("e7"),pos("e5"));
-		gameController.getBoard().draw();
+		moveResetTestCheckSecondMove(gameController.getBoard());
 		gameController.move(pos("f2"),pos("f4"));
-		gameController.getBoard().draw();
-		gameController.move(pos("d8"),pos("h4"));
-		gameController.getBoardAtMove(1).draw();
-		gameController.getBoardAtMove(2).draw();
-		gameController.getBoard().draw();
+		moveResetTestCheckThirdMove(gameController.getBoard());
+		
+		assertEquals("Should have three moves in list",3, gameController.getMoves().size());
+		
+		moveResetTestCheckFirstMove(gameController.getBoardAtMove(0));
+		moveResetTestCheckSecondMove(gameController.getBoardAtMove(1));
+		moveResetTestCheckThirdMove(gameController.getBoard());
+		
+		assertEquals("Should have three moves in list",3, gameController.getMoves().size());
+		assertEquals("Should be blacks turn", PlayerColor.BLACK, gameController.getCurrentPlayer());
+		gameController.revertLastMove();
+		moveResetTestCheckSecondMove(gameController.getBoard());
+
+		assertEquals("Should have two moves in list",2, gameController.getMoves().size());
+		assertEquals("Should be whites turn", PlayerColor.WHITE, gameController.getCurrentPlayer());
 	}
+	
+	
+	private void moveResetTestCheckFirstMove(Board board) {
+		assertNull(board.getPieceOfSquare(pos("e2")));
+		assertNotNull(board.getPieceOfSquare(pos("e4")));
+
+		assertNotNull(board.getPieceOfSquare(pos("e7")));
+		assertNull(board.getPieceOfSquare(pos("e5")));
+		
+		assertNotNull(board.getPieceOfSquare(pos("f2")));
+		assertNull(board.getPieceOfSquare(pos("f4")));
+	}
+	
+	private void moveResetTestCheckSecondMove(Board board) {
+		assertNull(board.getPieceOfSquare(pos("e2")));
+		assertNotNull(board.getPieceOfSquare(pos("e4")));
+
+		assertNull(board.getPieceOfSquare(pos("e7")));
+		assertNotNull(board.getPieceOfSquare(pos("e5")));
+		
+		assertNotNull(board.getPieceOfSquare(pos("f2")));
+		assertNull(board.getPieceOfSquare(pos("f4")));
+	}
+	
+	private void moveResetTestCheckThirdMove(Board board) {
+		assertNull(board.getPieceOfSquare(pos("e2")));
+		assertNotNull(board.getPieceOfSquare(pos("e4")));
+
+		assertNull(board.getPieceOfSquare(pos("e7")));
+		assertNotNull(board.getPieceOfSquare(pos("e5")));
+		
+		assertNull(board.getPieceOfSquare(pos("f2")));
+		assertNotNull(board.getPieceOfSquare(pos("f4")));
+	}
+
 }
