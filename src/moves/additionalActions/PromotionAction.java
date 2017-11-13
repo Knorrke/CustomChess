@@ -43,4 +43,8 @@ public class PromotionAction extends AdditionalAction {
 	public String toString() {
 		return String.format("Promotion %s %s->%s",piece.getClass().getSimpleName(),posToString(from), posToString(to));
 	}
+	
+	public void setPromoted(Piece promoted) {
+		this.promoted = promoted;
+	}
 }

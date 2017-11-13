@@ -75,4 +75,11 @@ public abstract class Move {
 		setExecuted(false);
 		return board;
 	};
+	
+	/**
+	 * Duplicates the Move for a different Board
+	 * @param board
+	 * @return
+	 */
+	public abstract Move duplicate(Board board);
 }
